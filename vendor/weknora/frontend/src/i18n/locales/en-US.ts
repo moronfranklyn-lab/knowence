@@ -4903,7 +4903,7 @@ export default {
     }
   },
   platform: {
-    subtitle: 'LLM-Powered Enterprise Knowledge Framework',
+    subtitle: 'Knowence · Enterprise AI Work System',
     description: 'RAG retrieval, agentic reasoning and Wiki knowledge bases — so your documents are truly understood and put to work',
     rag: 'RAG Enhanced Generation',
     agent: 'ReAct Agent',

@@ -96,9 +96,9 @@
     </div>
 
     <!-- Logo - Top Left -->
-    <a href="https://github.com/Tencent/WeKnora" target="_blank" class="header-logo" :title="$t('common.github')">
-      <img src="@/assets/img/weknora.png" alt="WeKnora" class="logo-image" />
-    </a>
+    <span class="header-logo" title="知微 Knowence">
+      <img src="@/assets/img/knowence-logo.svg" alt="知微 Knowence" class="logo-image" />
+    </span>
 
     <!-- Header Links - Top Right -->
     <div class="header-links">
@@ -842,7 +842,7 @@ onMounted(async () => {
   min-height: 100%;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(225deg, #022c22 0%, #064e3b 15%, #065f46 25%, #047857 38%, #059669 50%, #07C05F 65%, #10B981 78%, #34D399 90%, #6EE7B7 100%);
+  background: linear-gradient(225deg, #060a1c 0%, #0a1130 14%, #101a45 26%, #16245e 38%, #1b2d80 50%, #243da8 64%, #2f4ecb 78%, #3f66e8 90%, #7fa5ff 100%);
 
   &::before {
     content: '';
@@ -878,7 +878,7 @@ onMounted(async () => {
   border: 2px solid rgba(255, 255, 255, 0.3);
   box-shadow:
     0 0 15px rgba(255, 255, 255, 0.35),
-    0 0 30px rgba(16, 185, 129, 0.2),
+    0 0 30px rgba(56, 189, 248, 0.28),
     inset 0 0 8px rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;

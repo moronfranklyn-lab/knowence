@@ -1,0 +1,67 @@
+/* ============================================================
+ * Knowence 品牌主题层（二次开发新增，不改上游 theme.css）
+ *
+ * 设计方向：「靛蓝墨渊」——深靛夜色为场，电光青为主张。
+ * 记忆点只花一处：登录页知识图谱背景与主按钮的品牌光；其余保持克制。
+ * 令牌纪律：全部走 --td-* / --app-* 变量叠加，深色模式自动跟随；
+ * 不绕过 styleGuard（棘轮规则见 styleGuard.test.mjs）。
+ * ============================================================ */
+
+:root,
+:root[theme-mode="light"] {
+    /* —— 品牌色阶：10 档从雾蓝到墨渊 —— */
+    --td-brand-color-1: #eef4ff;   /* 浅底：选中行、轻提示 */
+    --td-brand-color-2: #cfe0ff;
+    --td-brand-color-3: #a8c6ff;
+    --td-brand-color-4: #7fa5ff;   /* ← brand 主位（原绿色 4 档的位置） */
+    --td-brand-color-5: #5d87f7;
+    --td-brand-color-6: #3f66e8;   /* active / 强调 */
+    --td-brand-color-7: #2f4ecb;
+    --td-brand-color-8: #243da8;
+    --td-brand-color-9: #1b2d80;
+    --td-brand-color-10: #12205c;
+
+    --brand-main: var(--td-brand-color-4);
+    --td-brand-color: var(--td-brand-color-4);
+    --td-brand-color-hover: var(--td-brand-color-3);
+    --td-brand-color-active: var(--td-brand-color-5);
+    --td-brand-color-disabled: #b8cbf2;
+    --td-brand-color-light: var(--td-brand-color-1);
+    --td-brand-color-focus: color-mix(in srgb, var(--td-brand-color) 20%, transparent);
+
+    /* 页面底色微冷：不再是中性灰，带一丝靛 */
+    --td-bg-color-page: #eef0f7;
+    --td-bg-color-sidebar: #f6f7fc;
+
+    /* Knowence 专属令牌 */
+    --knw-electric: #38bdf8;        /* 电光青：唯一点缀色 */
+    --knw-ink-900: #0a1130;         /* 墨渊：hero 最深 */
+    --knw-ink-700: #12205c;
+    --knw-ink-500: #1d3183;
+}
+
+:root[theme-mode="dark"] {
+    --td-brand-color-1: #3f66e820;
+    --td-brand-color-2: #1b2d80;
+    --td-brand-color-3: #243da8;
+    --td-brand-color-4: #2f4ecb;
+    --td-brand-color-5: #3f66e8;
+    --td-brand-color-6: #5d87f7;    /* dark 主位 */
+    --td-brand-color-7: #7fa5ff;
+    --td-brand-color-8: #a8c6ff;
+    --td-brand-color-9: #cfe0ff;
+    --td-brand-color-10: #eaf1ff;
+
+    --brand-main: var(--td-brand-color-6);
+    --td-brand-color: var(--td-brand-color-6);
+    --td-brand-color-hover: var(--td-brand-color-5);
+    --td-brand-color-active: var(--td-brand-color-7);
+    --td-brand-color-disabled: #1e3160;
+    --td-brand-color-focus: color-mix(in srgb, var(--td-brand-color) 28%, transparent);
+
+    --td-bg-color-page: #080d20;
+    --td-bg-color-sidebar: #0a1130;
+    --td-bg-color-container: #101838;
+    --td-bg-color-container-hover: #16204a;
+    --td-bg-color-secondarycontainer: #131b3e;
+}

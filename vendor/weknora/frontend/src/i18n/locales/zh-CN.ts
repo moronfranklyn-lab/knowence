@@ -2706,8 +2706,8 @@ export default {
     pinned: '已置顶'
   },
   platform: {
-    subtitle: '大模型驱动的企业级知识框架',
-    description: 'RAG 检索、智能体推理、Wiki 知识库，让文档真正被理解和运用',
+    subtitle: '知微 Knowence · 企业 AI 工作系统',
+    description: '每一条知识都有据可查——混合检索、智能体执行、权限治理，让资料真正变成生产力',
     rag: 'RAG 增强生成',
     agent: 'ReAct 智能体',
     wiki: 'Wiki 知识库',
