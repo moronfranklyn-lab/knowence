@@ -4903,8 +4903,8 @@ export default {
     }
   },
   platform: {
-    subtitle: 'LLM駆動のエンタープライズ向けナレッジフレームワーク',
-    description: 'RAG検索、エージェント推論、Wikiナレッジベースにより、ドキュメントを本当に理解し活用できます',
+    subtitle: '知微 Knowence · エンタープライズAIワークシステム',
+    description: 'すべての回答に出典を——ハイブリッド検索、エージェント実行、権限ガバナンスで、資料を真の生産性へ',
     rag: 'RAG拡張生成',
     agent: 'ReActエージェント',
     wiki: 'Wikiナレッジベース',

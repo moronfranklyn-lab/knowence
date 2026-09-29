@@ -4904,7 +4904,7 @@ export default {
   },
   platform: {
     subtitle: 'Knowence · Enterprise AI Work System',
-    description: 'RAG retrieval, agentic reasoning and Wiki knowledge bases — so your documents are truly understood and put to work',
+    description: 'Every answer backed by evidence — hybrid retrieval, agentic execution and permission governance turn documents into productivity',
     rag: 'RAG Enhanced Generation',
     agent: 'ReAct Agent',
     wiki: 'Wiki Knowledge Base',

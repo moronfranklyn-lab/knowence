@@ -2704,8 +2704,8 @@ export default {
     pinned: '고정됨'
   },
   platform: {
-    subtitle: '대규모 언어 모델 기반 엔터프라이즈 지식 프레임워크',
-    description: 'RAG 검색, 에이전트 추론, Wiki 지식베이스로 문서를 진정으로 이해하고 활용합니다',
+    subtitle: '지미 Knowence · 엔터프라이즈 AI 워크 시스템',
+    description: '모든 답변에 근거를 — 하이브리드 검색, 에이전트 실행, 권한 거버넌스로 문서를 진정한 생산성으로',
     rag: 'RAG 강화 생성',
     agent: 'ReAct 에이전트',
     wiki: 'Wiki 지식베이스',
