@@ -1329,12 +1329,39 @@ onMounted(async () => {
 
 .form-card {
   background: rgba(255, 255, 255, 0.97);
-  border-radius: 16px;
+  border-radius: var(--app-radius-xl);
   padding: 40px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
   border: none;
   width: 100%;
+}
+
+/* Knowence 品牌层：登录卡内主行动按钮 = 墨渊→亮靛渐变 + 电光青辉光。
+ * 只作用于登录页 submit，全站 t-button 不受影响。 */
+.submit-button.t-button--variant-base.t-button--theme-primary {
+  height: 50px;
+  border-radius: var(--app-radius-lg);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: none;
+  background: linear-gradient(135deg, var(--knw-ink-700) 0%, #2f4ecb 55%, var(--td-brand-color-5) 100%);
+  box-shadow:
+    0 8px 22px -8px color-mix(in srgb, var(--td-brand-color) 55%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--knw-electric) 14%, transparent) inset;
+  transition: transform var(--app-motion-fast), box-shadow var(--app-motion-fast);
+
+  &:hover {
+    background: linear-gradient(135deg, #1b2d80 0%, #3f66e8 55%, #5d87f7 100%);
+    transform: translateY(-1px);
+    box-shadow:
+      0 12px 26px -8px color-mix(in srgb, var(--td-brand-color) 65%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--knw-electric) 22%, transparent) inset;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
 /* Share-link invitation banner. Sits above the register form when the
@@ -1491,7 +1518,7 @@ onMounted(async () => {
 
     &:focus-within {
       border-color: var(--td-brand-color);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--td-brand-color) 10%, transparent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--td-brand-color) 12%, transparent);
     }
 
     &:hover {
@@ -1820,7 +1847,7 @@ onMounted(async () => {
 <style lang="less">
 html[theme-mode="dark"] {
   .login-layout {
-    background: linear-gradient(225deg, #011a14 0%, #032e22 15%, #043a2c 25%, #05503d 38%, #046647 50%, #038a56 65%, #049b60 78%, #06a06a 90%, #07b074 100%);
+    background: linear-gradient(225deg, #04071a 0%, #060a1c 14%, #0a1130 28%, #101a45 42%, #16245e 56%, #1b2d80 70%, #243da8 84%, #2f4ecb 100%);
   }
 
   .knowledge-node {
