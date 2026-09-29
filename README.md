@@ -4,6 +4,10 @@
 >
 > 基于 [Tencent/WeKnora](https://github.com/Tencent/WeKnora)（MIT）二次开发。
 
+![登录页](docs/images/login-shapewaves.png)
+
+![工作台](docs/images/workbench-new-chat.png)
+
 ## 它能做什么
 
 - **统一 RAG 知识库**：Word/PDF/Excel/Markdown 等多格式入库，分块可编辑、可比对、可回滚
