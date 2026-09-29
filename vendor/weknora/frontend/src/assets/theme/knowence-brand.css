@@ -7,8 +7,8 @@
  * 不绕过 styleGuard（棘轮规则见 styleGuard.test.mjs）。
  * ============================================================ */
 
-:root,
-:root[theme-mode="light"] {
+:root:root,
+:root:root[theme-mode="light"] {
     /* —— 品牌色阶：10 档从雾蓝到墨渊 —— */
     --td-brand-color-1: #eef4ff;   /* 浅底：选中行、轻提示 */
     --td-brand-color-2: #cfe0ff;
@@ -40,7 +40,7 @@
     --knw-ink-500: #1d3183;
 }
 
-:root[theme-mode="dark"] {
+:root:root[theme-mode="dark"] {
     --td-brand-color-1: #3f66e820;
     --td-brand-color-2: #1b2d80;
     --td-brand-color-3: #243da8;

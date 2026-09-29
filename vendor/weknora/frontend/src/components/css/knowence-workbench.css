@@ -115,13 +115,16 @@
   border-radius: var(--app-radius-pill);
 }
 
-/* 波纹上位后，旧知识图谱节点退为背景微动，不再抢戏 */
-.animated-bg .knowledge-node {
-  opacity: 0.5;
+/* 波纹上位后，旧知识图谱节点退场（Chanel 法则：出门前摘掉一件首饰） */
+.animated-bg .knowledge-node,
+.animated-bg .knowledge-lines {
+  display: none;
 }
 
-.animated-bg .knowledge-lines {
-  opacity: 0.15;
+/* 提示条去薄荷绿底，换品牌浅蓝 */
+.login-layout .form-card .form-hint {
+  background: var(--td-brand-color-1);
+  color: var(--td-brand-color-8);
 }
 
 /* 内容层浮于波纹之上 */

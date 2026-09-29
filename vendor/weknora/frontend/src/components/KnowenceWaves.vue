@@ -379,6 +379,11 @@ onMounted(() => {
 
   let disposed = false;
   let failed = false;
+  let stage = 'start';
+  const setStage = (v: string) => {
+    stage = v;
+    canvas?.setAttribute('data-stage', v);
+  };
   let gpu: any;
   let maskTexture: any;
   let chargeBuffer: any;
@@ -466,7 +471,7 @@ onMounted(() => {
     gpu = undefined;
     try { failedGpu?.dispose(); } catch { /* noop */ }
     ready.value = false;
-    emit('error', error instanceof Error ? error : new Error(String(error)));
+    emit('error', new Error(`[${stage}] ` + (error instanceof Error ? error.message : String(error))));
   };
 
   const measureSurface = () => {
@@ -477,7 +482,9 @@ onMounted(() => {
   void (async () => {
     try {
       if (!navigator.gpu) throw new Error('WebGPU unavailable');
+      setStage('init');
       gpu = await init({ powerPreference: 'low-power' });
+      setStage('init-done');
       if (disposed) return gpu.dispose();
       unsubscribeGpuError = gpu.onError(reportFailure);
 
@@ -501,6 +508,7 @@ onMounted(() => {
       });
       const createMaskTexture = (w: number, h: number) =>
         gpu.device.createTexture({
+          kind: '2d',
           size: [w, h], format: 'rgba8unorm',
           usage: ['texture_binding', 'copy_dst', 'render_attachment'],
           label: 'shape-waves-mask',
@@ -509,6 +517,7 @@ onMounted(() => {
       chargeBuffer = storage(gpu, 4, 'read');
       chargeBuffer.write(charges);
 
+      setStage('scene-effect');
       const scene = effect(gpu, SCENE_SHADER, {
         label: 'shape-waves-scene',
         set: { params, maskTexture, maskSampler: linearSampler, charges: chargeBuffer },
@@ -532,6 +541,7 @@ onMounted(() => {
         label: 'shape-waves-composite',
         set: { composite: compositeParams, sceneTexture: sceneTarget, glowTexture: glowB, linearSampler },
       });
+      setStage('compile');
       await Promise.all([
         scene.compile({ colors: [outputFormat] }),
         scene.compile(sceneTarget),
@@ -760,8 +770,10 @@ onMounted(() => {
       window.addEventListener('pointermove', handlePointerMove, { passive: true });
       window.addEventListener('scroll', invalidateBounds, { capture: true, passive: true });
 
+setStage('first-render');
       resize();
       applyMask();
+      setStage('done');
 
       cleanup = () => {
         disposed = true;
