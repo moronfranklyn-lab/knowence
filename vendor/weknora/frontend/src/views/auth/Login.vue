@@ -4,13 +4,14 @@
       <!-- Knowence 品牌波纹层：点阵在「知微」字形处让空，鼠标推开涟漪 -->
       <div class="knw-hero-waves">
         <KnowenceWaves
+          @error="onWavesError"
           text="知微"
           font-family="'PingFang SC', 'Hiragino Sans GB', system-ui, sans-serif"
           :font-weight="700"
           :text-size="0.52"
           color="#4f6bd8"
           hover-color="#cfe0ff"
-          background-color="transparent"
+          background-color="#0a1130"
           :cell-size="12"
           :dot-size="0.7"
           :brightness="0.52"
@@ -20,6 +21,7 @@
           :splash-strength="0.4"
           :speed="0.7"
         />
+        <div v-if="wavesError" class="knw-waves-diag">动效引擎未启动：{{ wavesError }}</div>
       </div>
       <div class="knowledge-node node-1">
         <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -434,6 +436,8 @@ const registerFormRef = ref()
 const loading = ref(false)
 const oidcLoading = ref(false)
 const isRegisterMode = ref(false)
+const wavesError = ref('')
+const onWavesError = (e) => { wavesError.value = (e && e.message) ? String(e.message) : String(e); console.error('[KnowenceWaves] init failed:', e) }
 const showLanguageMenu = ref(false)
 const oidcEnabled = ref(false)
 const oidcProviderName = ref('')

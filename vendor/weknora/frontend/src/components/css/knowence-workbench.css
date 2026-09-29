@@ -99,6 +99,22 @@
   pointer-events: none;
 }
 
+.knw-hero-waves .knowence-waves__canvas {
+  mix-blend-mode: screen; /* 深靛画布底色与渐变场相加：黑=隐形，亮点发光 */
+}
+
+.knw-waves-diag {
+  position: absolute;
+  bottom: var(--app-space-4);
+  left: var(--app-space-4);
+  z-index: 2;
+  font-size: var(--app-text-sm);
+  color: var(--td-text-color-placeholder);
+  background: var(--td-bg-color-container-hover);
+  padding: var(--app-space-1) var(--app-space-3);
+  border-radius: var(--app-radius-pill);
+}
+
 /* 波纹上位后，旧知识图谱节点退为背景微动，不再抢戏 */
 .animated-bg .knowledge-node {
   opacity: 0.5;
