@@ -1,6 +1,26 @@
 <template>
   <div class="login-layout">
     <div class="animated-bg">
+      <!-- Knowence 品牌波纹层：点阵在「知微」字形处让空，鼠标推开涟漪 -->
+      <div class="knw-hero-waves">
+        <KnowenceWaves
+          text="知微"
+          font-family="'PingFang SC', 'Hiragino Sans GB', system-ui, sans-serif"
+          :font-weight="700"
+          :text-size="0.52"
+          color="#4f6bd8"
+          hover-color="#cfe0ff"
+          background-color="transparent"
+          :cell-size="12"
+          :dot-size="0.7"
+          :brightness="0.52"
+          :contrast="0.9"
+          :fade="0.35"
+          :glow="0.4"
+          :splash-strength="0.4"
+          :speed="0.7"
+        />
+      </div>
       <div class="knowledge-node node-1">
         <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -367,6 +387,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 
 // Import screenshot images
+import KnowenceWaves from '@/components/KnowenceWaves.vue'
 import screenshot1 from '@/assets/img/screenshot-1.svg'
 import screenshot2 from '@/assets/img/screenshot-2.svg'
 import screenshot3 from '@/assets/img/screenshot-3.svg'

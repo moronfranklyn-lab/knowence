@@ -90,3 +90,40 @@
   position: relative;
   z-index: 1;
 }
+
+/* ---------- 登录页波纹层（hero 深靛底是唯一能让 screen 混合发光的场） ---------- */
+.knw-hero-waves {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 波纹上位后，旧知识图谱节点退为背景微动，不再抢戏 */
+.animated-bg .knowledge-node {
+  opacity: 0.5;
+}
+
+.animated-bg .knowledge-lines {
+  opacity: 0.15;
+}
+
+/* 内容层浮于波纹之上 */
+.login-layout .showcase-section,
+.login-layout .form-section,
+.login-layout .header-logo,
+.login-layout .header-links {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .knw-hero-waves {
+    display: none;
+  }
+
+  .animated-bg .knowledge-node,
+  .animated-bg .knowledge-lines {
+    opacity: 0.35;
+  }
+}
