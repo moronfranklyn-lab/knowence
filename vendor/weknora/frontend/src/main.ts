@@ -7,6 +7,7 @@ import TDesign from "tdesign-vue-next";
 import "tdesign-vue-next/dist/tdesign.css";
 import "@/assets/theme/theme.css";
 import "@/assets/theme/knowence-brand.css";
+import "@/components/css/knowence-workbench.css";
 import "@/assets/theme/tdesign-overrides.less";
 import "@/assets/dropdown-menu.less";
 import "@/components/css/chat-hljs-dark.less";

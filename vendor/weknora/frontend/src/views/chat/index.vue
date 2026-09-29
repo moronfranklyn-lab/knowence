@@ -89,6 +89,18 @@
                                     </div>
                                 </div>
                             </transition>
+
+                            <!-- Knowence 工作台层：空状态问候 + 快捷能力标签 -->
+                            <div class="knw-workspace-hero">
+                                <h2 class="knw-workspace-hero__title">{{ t('knowence.workbenchGreeting') }}</h2>
+                                <p class="knw-workspace-hero__sub">{{ t('knowence.workbenchSub') }}</p>
+                            </div>
+                            <div class="knw-quick-tags">
+                                <button v-for="q in knowenceQuickPrompts" :key="q.key" type="button"
+                                    class="knw-quick-tag" @click="applyKnowenceQuickPrompt(q)">
+                                    <span class="knw-quick-tag__dot"></span>{{ t(q.key) }}
+                                </button>
+                            </div>
                         </div>
                         <!--
                       关键：必须用 session.id 作为 key，不能用 v-for 的索引。
@@ -269,6 +281,17 @@ const isAgentStreamSession = () => {
 const uiStore = useUIStore();
 const { navigateToKnowledgeBaseList } = useKnowledgeBaseCreationNavigation();
 const { t } = useI18n();
+
+// Knowence 工作台层：快捷能力标签（WorkBuddy 式入口）
+const knowenceQuickPrompts = [
+  { key: 'knowence.quick.doc', promptKey: 'knowence.quickDocPrompt' },
+  { key: 'knowence.quick.research', promptKey: 'knowence.quickResearchPrompt' },
+  { key: 'knowence.quick.report', promptKey: 'knowence.quickReportPrompt' },
+  { key: 'knowence.quick.summary', promptKey: 'knowence.quickSummaryPrompt' },
+];
+const applyKnowenceQuickPrompt = (q) => {
+  inputFieldRef.value?.prefill(t(q.promptKey));
+};
 const { firstQuery, firstMentionedItems, firstModelId, firstImageFiles, firstAttachmentFiles, firstQuestionOrigin } = storeToRefs(usemenuStore);
 // Capture before the initial send consumes firstQuery; the child focuses after mounting.
 const focusComposerOnMount = Boolean(firstQuery.value);
