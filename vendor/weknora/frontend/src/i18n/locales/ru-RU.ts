@@ -5120,7 +5120,7 @@ export default {
     haveAccount: 'Уже есть аккаунт?',
     backToLogin: 'Вернуться ко входу',
     loginHint: 'Войдите, чтобы продолжить, или создайте аккаунт ниже, если вы впервые здесь.',
-    firstTime: 'Впервые в WeKnora?',
+    firstTime: 'Впервые в Knowence?',
     registerSuccess: 'Регистрация завершена. Войдите в систему',
     registerFailed: 'Ошибка регистрации',
     subtitle: 'RAG, ReAct-агент и Wiki — корпоративный фреймворк знаний на основе больших моделей',
