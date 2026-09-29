@@ -3,7 +3,7 @@
         <!-- 展开时：Logo + 搜索/折叠按钮同行 -->
         <div class="logo_row" v-if="!uiStore.sidebarCollapsed">
             <div class="logo_box" @click="router.push('/platform/knowledge-bases')" style="cursor: pointer;">
-                <img class="logo" src="@/assets/img/weknora.png" alt="">
+                <img class="logo" src="@/assets/img/knowence-logo-dark.svg" alt="">
                 <sup v-if="isLiteEdition" class="lite-badge">Lite</sup>
             </div>
             <div class="logo_actions">
@@ -1948,7 +1948,8 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
 <style lang="less">
 // Dark mode: invert dark logo to light
 html[theme-mode="dark"] .aside_box .logo_box .logo {
-    filter: invert(1) hue-rotate(180deg);
+    /* Knowence logo 自带浅色变体，无需滤镜 */
+    filter: none;
 }
 
 // Dark mode: 滚动条在深色背景下需要更亮的颜色才看得见

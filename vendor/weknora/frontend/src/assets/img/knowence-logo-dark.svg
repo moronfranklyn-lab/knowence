@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="32" viewBox="0 0 128 32">
+  <defs><linearGradient id="k" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3f66e8"/><stop offset="1" stop-color="#38bdf8"/></linearGradient></defs>
+  <circle cx="16" cy="16" r="11" fill="none" stroke="url(#k)" stroke-width="2.2"/>
+  <circle cx="16" cy="16" r="3.2" fill="#38bdf8"/>
+  <path d="M16 5 A11 11 0 0 1 26.5 20" fill="none" stroke="#243da8" stroke-opacity=".75" stroke-width="2.2" stroke-linecap="round"/>
+  <text x="34" y="21" font-family="-apple-system,'PingFang SC',sans-serif" font-size="14" font-weight="700" fill="#12205c">知微 <tspan font-weight="500" fill="#3f66e8">Knowence</tspan></text>
+</svg>
