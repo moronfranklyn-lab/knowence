@@ -4,6 +4,14 @@
             <div class="dialogue-title" style="--wails-draggable: drag">
                 <span style="--wails-draggable: drag">{{ $t('createChat.title') }}</span>
             </div>
+            <!-- Knowence 工作台层：品牌副句 + 快捷能力标签（点选后填入输入框） -->
+            <p class="knw-chat-sub">{{ $t('knowence.workbenchSub') }}</p>
+            <div class="knw-quick-tags knw-quick-tags--center">
+                <button v-for="q in knowenceQuickPrompts" :key="q.key" type="button" class="knw-quick-tag"
+                    @click="applyKnowenceQuickPrompt(q)">
+                    <span class="knw-quick-tag__dot"></span>{{ $t(q.key) }}
+                </button>
+            </div>
             <!-- 推荐问题 -->
             <div ref="sqContainerRef" class="suggested-questions-container">
                 <!-- 骨架屏占位 -->
@@ -215,6 +223,17 @@ onMounted(() => {
 });
 
 const inputFieldRef = ref();
+
+// Knowence 工作台层：快捷能力标签（WorkBuddy 式入口，点选填入输入框不直接发送）
+const knowenceQuickPrompts = [
+    { key: 'knowence.quick.doc', promptKey: 'knowence.quickDocPrompt' },
+    { key: 'knowence.quick.research', promptKey: 'knowence.quickResearchPrompt' },
+    { key: 'knowence.quick.report', promptKey: 'knowence.quickReportPrompt' },
+    { key: 'knowence.quick.summary', promptKey: 'knowence.quickSummaryPrompt' },
+];
+const applyKnowenceQuickPrompt = (q: { promptKey: string }) => {
+    inputFieldRef.value?.prefill(t(q.promptKey));
+};
 
 // The suggestion's source rides with this send to the new session's first
 // request, so the agent searches it before answering.

@@ -265,7 +265,7 @@ export default {
     reopen: 'プロダクトツアー',
     steps: {
       welcome: {
-        title: 'WeKnoraへようこそ',
+        title: 'Knowenceへようこそ',
         desc: '数ステップでナレッジベース、チャット、エージェントの使い方をご紹介します。「次へ」をクリックして開始してください。'
       },
       knowledge: {
@@ -2785,7 +2785,7 @@ export default {
     goToAgentSettings: 'エージェント設定に移動'
   },
   createChat: {
-    title: 'こんにちは、WeKnoraです。あなたのナレッジを、すぐそばに',
+    title: 'こんにちは、Knowenceです。あなたのナレッジを、すぐそばに',
     newSessionTitle: '新しいセッション',
     openProject: 'プロジェクトを選択',
     clearProject: '解除',

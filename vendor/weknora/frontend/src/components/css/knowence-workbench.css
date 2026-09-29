@@ -146,3 +146,16 @@
     opacity: 0.35;
   }
 }
+
+/* ---------- 新对话页（creatChat）工作台层 ---------- */
+.knw-chat-sub {
+  text-align: center;
+  margin: var(--app-space-2) 0 0;
+  font-size: var(--app-text-base);
+  color: var(--td-text-color-secondary);
+}
+
+.knw-quick-tags--center {
+  justify-content: center;
+  margin: var(--app-space-4) 0 0;
+}
