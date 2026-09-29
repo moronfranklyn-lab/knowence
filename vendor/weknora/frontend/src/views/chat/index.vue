@@ -90,7 +90,15 @@
                                 </div>
                             </transition>
 
-                            <!-- Knowence 工作台层：空状态问候 + 快捷能力标签 -->
+                            <!-- Knowence 工作台层：ShapeWaves 点阵背景 + 问候 + 快捷能力标签 -->
+                            <div class="knw-waves-backdrop">
+                                <KnowenceWaves
+                                    :text="'Knowence'"
+                                    color="#4f6bd8" hover-color="#cfe0ff" background-color="transparent"
+                                    :cell-size="11" :dot-size="0.7" :brightness="0.5" :contrast="0.9"
+                                    :fade="0.45" :glow="0.3" :splash-strength="0.35" :speed="0.8"
+                                />
+                            </div>
                             <div class="knw-workspace-hero">
                                 <h2 class="knw-workspace-hero__title">{{ t('knowence.workbenchGreeting') }}</h2>
                                 <p class="knw-workspace-hero__sub">{{ t('knowence.workbenchSub') }}</p>
@@ -252,6 +260,7 @@ import { provideChatAttachmentPreviewDrawer } from '@/composables/useChatAttachm
 import { useSessionActivityStore } from '@/stores/sessionActivity';
 import { provideChatSandboxPanel } from '@/composables/useChatSandboxPanel';
 import SandboxSidePanel from '@/components/chat/SandboxSidePanel.vue';
+import KnowenceWaves from '@/components/KnowenceWaves.vue';
 import BrowserTaskPreview from './components/BrowserTaskPreview.vue';
 import { collectSessionArtifacts, markSessionArtifactDeleted } from '@/utils/sessionArtifacts';
 import { isCollectingSkillArtifacts } from '@/utils/skillArtifacts';

@@ -63,3 +63,30 @@
     flex-shrink: 0;
   }
 }
+
+/* ShapeWaves 背景层：需要宿主容器 position:relative */
+.suggested-questions-container {
+  position: relative;
+}
+
+.knw-waves-backdrop {
+  position: absolute;
+  inset: calc(var(--app-space-8) * -1) calc(var(--app-space-6) * -1);
+  z-index: 0;
+  opacity: 0.55;
+  border-radius: var(--app-radius-xl);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.knw-waves-backdrop :deep(canvas),
+.knw-waves-backdrop canvas {
+  mix-blend-mode: screen;
+}
+
+.knw-workspace-hero,
+.knw-quick-tags,
+.suggested-questions-inner {
+  position: relative;
+  z-index: 1;
+}
