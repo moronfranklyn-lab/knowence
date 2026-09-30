@@ -1753,8 +1753,8 @@ export default {
           desc: 'Microsoft MarkItDown 변환기 (PDF/Office/HTML 등)'
         },
         weknoracloud: {
-          name: 'WeKnora Cloud',
-          desc: 'WeKnora Cloud를 통한 문서 파싱'
+          name: '클라우드 호스팅',
+          desc: '클라우드 호스팅으로 문서를 파싱합니다'
         },
         paddleocr_vl_cloud: {
           name: 'PaddleOCR-VL Cloud',
@@ -5579,6 +5579,7 @@ export default {
     }
   },
   settings: {
+    cloudHosting: '클라우드 호스팅',
     modelManagement: '모델 관리',
     webSearchConfig: '웹 검색',
     autoCheckUpdate: '업데이트 자동 다운로드',
@@ -6234,8 +6235,8 @@ export default {
       paddleocrVlCloudTokenPlaceholder: 'PaddleOCR-VL AI Studio Token'
     },
     weknoraCloud: {
-      title: 'WeKnora Cloud',
-      description: 'WeKnora Cloud APPID 및 APPSECRET 자격 증명을 설정합니다. 자격 증명은 모델 서비스와 문서 파싱 엔진에 사용됩니다.',
+      title: '클라우드 호스팅',
+      description: '클라우드 호스팅의 APPID와 APPSECRET 자격 증명을 설정합니다. 모델 서비스와 문서 파싱 엔진에서 사용됩니다.',
       viewDocs: '문서 보기',
       unconfigured: '자격 증명이 설정되지 않았습니다. APPID와 APPSECRET을 입력하세요.',
       configured: '자격 증명이 설정되었으며 정상 작동 중입니다.',

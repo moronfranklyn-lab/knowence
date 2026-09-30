@@ -1330,6 +1330,7 @@ export default {
     }
   },
   settings: {
+    cloudHosting: 'Cloud Hosting',
     modelManagement: 'Model Management',
     webSearchConfig: 'Web Search',
     autoCheckUpdate: 'Auto Download Updates',
@@ -1830,8 +1831,8 @@ export default {
     },
     capabilityUnavailable: 'This feature is not supported by the current deployment. You have been returned to an available page.',
     weknoraCloud: {
-      title: 'WeKnora Cloud',
-      description: 'Configure WeKnora Cloud APPID and APPSECRET credentials. Credentials are used for model services and document parsing engine.',
+      title: 'Cloud Hosting',
+      description: 'Configure the APPID and APPSECRET credentials for Cloud Hosting. They are used by model services and document parsing engines.',
       viewDocs: 'View Docs',
       unconfigured: 'Credentials not configured. Please fill in APPID and APPSECRET.',
       configured: 'Credentials configured and working.',
@@ -5893,8 +5894,8 @@ export default {
           desc: 'PaddleOCR-VL Cloud API'
         },
         weknoracloud: {
-          name: 'WeKnora Cloud',
-          desc: 'Document parsing via WeKnora Cloud'
+          name: 'Cloud Hosting',
+          desc: 'Use Cloud Hosting for document parsing'
         },
         markitdown: {
           name: 'MarkItDown',

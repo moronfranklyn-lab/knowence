@@ -1755,8 +1755,8 @@ export default {
           desc: 'Microsoft MarkItDown 文档转换工具（支持 PDF/Office/HTML 等）'
         },
         weknoracloud: {
-          name: 'WeKnora Cloud',
-          desc: '使用 WeKnora Cloud 进行文档解析'
+          name: '云端托管服务',
+          desc: '使用云端托管服务进行文档解析'
         },
         paddleocr_vl_cloud: {
           name: 'PaddleOCR-VL Cloud',
@@ -5581,6 +5581,7 @@ export default {
     }
   },
   settings: {
+    cloudHosting: '云端托管服务',
     modelManagement: '模型管理',
     webSearchConfig: '网络搜索',
     autoCheckUpdate: '自动下载更新',
@@ -6236,8 +6237,8 @@ export default {
       paddleocrVlCloudTokenPlaceholder: 'PaddleOCR-VL 飞桨星河社区 Token'
     },
     weknoraCloud: {
-      title: 'WeKnora Cloud',
-      description: '配置 WeKnora Cloud 的 APPID 和 APPSECRET 凭证。凭证用于模型服务和文档解析引擎。',
+      title: '云端托管服务',
+      description: '配置云端托管服务的 APPID 和 APPSECRET 凭证。凭证用于模型服务和文档解析引擎。',
       viewDocs: '查看文档',
       unconfigured: '尚未配置凭证，请填写 APPID 和 APPSECRET',
       configured: '凭证已配置，状态正常',

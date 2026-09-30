@@ -1753,8 +1753,8 @@ export default {
           desc: 'Конвертер Microsoft MarkItDown (PDF/Office/HTML и др.)'
         },
         weknoracloud: {
-          name: 'WeKnora Cloud',
-          desc: 'Парсинг документов через WeKnora Cloud'
+          name: 'Облачный хостинг',
+          desc: 'Использовать облачный хостинг для разбора документов'
         },
         paddleocr_vl_cloud: {
           name: 'PaddleOCR-VL Cloud',
@@ -5579,6 +5579,7 @@ export default {
     }
   },
   settings: {
+    cloudHosting: 'Облачный хостинг',
     modelManagement: 'Управление моделями',
     webSearchConfig: 'Сетевой поиск',
     autoCheckUpdate: 'Автоматическая загрузка обновлений',
@@ -6234,8 +6235,8 @@ export default {
       paddleocrVlCloudTokenPlaceholder: 'Токен PaddleOCR-VL AI Studio'
     },
     weknoraCloud: {
-      title: 'WeKnora Cloud',
-      description: 'Настройте учётные данные APPID и APPSECRET для WeKnora Cloud. Данные используются для модельных сервисов и движка парсинга документов.',
+      title: 'Облачный хостинг',
+      description: 'Настройте APPID и APPSECRET для облачного хостинга. Они используются сервисами моделей и движками разбора документов.',
       viewDocs: 'Документация',
       unconfigured: 'Учётные данные не настроены. Заполните APPID и APPSECRET.',
       configured: 'Учётные данные настроены, статус в норме.',

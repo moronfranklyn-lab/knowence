@@ -1330,6 +1330,7 @@ export default {
     }
   },
   settings: {
+    cloudHosting: 'クラウドホスティング',
     modelManagement: 'モデル管理',
     webSearchConfig: 'Web検索',
     autoCheckUpdate: '更新の自動ダウンロード',
@@ -1830,8 +1831,8 @@ export default {
     },
     capabilityUnavailable: 'この機能は現在のデプロイでは利用できません。利用可能なページに戻りました。',
     weknoraCloud: {
-      title: 'WeKnora Cloud',
-      description: 'WeKnora CloudのAPPIDとAPPSECRETを設定します。この認証情報はモデルサービスとドキュメント解析エンジンで使用されます。',
+      title: 'クラウドホスティング',
+      description: 'クラウドホスティングの APPID と APPSECRET を設定します。モデルサービスと文書解析エンジンで使用されます。',
       viewDocs: 'ドキュメントを表示',
       unconfigured: '認証情報が未設定です。APPIDとAPPSECRETを入力してください。',
       configured: '認証情報は設定済みで、正常に動作しています。',
@@ -5893,8 +5894,8 @@ export default {
           desc: 'PaddleOCR-VL Cloud API'
         },
         weknoracloud: {
-          name: 'WeKnora Cloud',
-          desc: 'WeKnora Cloudによるドキュメント解析'
+          name: 'クラウドホスティング',
+          desc: 'クラウドホスティングで文書を解析します'
         },
         markitdown: {
           name: 'MarkItDown',
