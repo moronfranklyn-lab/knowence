@@ -68,6 +68,34 @@ ipconfig | findstr /i "IPv4"
 curl.exe http://localhost:11434/v1/models
 ```
 
+## 二之二、模型下载走 ModelScope（强烈推荐）
+
+> **为什么**：`ollama pull` 走官方仓库，国内实测约 **186 KB/s**，4.7GB 要一个多小时。
+> ModelScope 实测 **10.6 MB/s**，同样的模型 **约 7 分钟**。
+
+用 `ollama create` 导入 GGUF（Ollama 支持直接吃 GGUF）：
+
+```powershell
+# 1) 下载单文件 Q4_K_M（4.4GB，约 7 分钟）
+$url = "https://modelscope.cn/api/v1/models/bartowski/Qwen2.5-7B-Instruct-GGUF/repo?Revision=master&FilePath=Qwen2.5-7B-Instruct-Q4_K_M.gguf"
+$out = "$env:USERPROFILE\Downloads\qwen2.5-7b-q4km.gguf"
+curl.exe -L --retry 3 -o $out $url
+Write-Host "下载完成，大小: $([math]::Round((Get-Item $out).Length/1GB,2)) GB"
+
+# 2) 生成 Modelfile 并导入
+$mf = "$env:USERPROFILE\Downloads\Modelfile"
+"FROM $($out -replace '\\','/')" | Set-Content -Path $mf -Encoding ASCII
+& "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" create qwen2.5-7b -f $mf
+
+# 3) 验证
+& "$env:LOCALAPPDATA\Programs\Ollama\ollama.exe" list
+```
+
+**选型说明**：官方 `Qwen/Qwen2.5-7B-Instruct-GGUF` 的 q4_k_m 被切成两个分片
+（3808MB + 658MB），导入麻烦；`bartowski` 单文件版 4466MB 更省事。
+
+### 冒烟测试（走本地 HTTP 接口）
+
 ### 备选：用脚本一键完成
 
 拷 `windows-inference-node.ps1` 到桌面后：
