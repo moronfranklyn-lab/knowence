@@ -816,7 +816,7 @@ const isMaskedSecret = (value?: string) => value === secretPlaceholder
 // the sandbox account cannot write.
 const defaultDockerImage = 'wechatopenai/weknora-sandbox:main'
 
-const clusterGuideUrl = 'https://github.com/Tencent/WeKnora/blob/main/website-docs/06-development/04-sandbox-deployment.md'
+const clusterGuideUrl = 'https://github.com/moronfranklyn-lab/knowence/tree/main/docs'
 const e2bApiKeysUrl = 'https://e2b.dev/dashboard?tab=keys'
 
 const backendOptions = computed(() => {

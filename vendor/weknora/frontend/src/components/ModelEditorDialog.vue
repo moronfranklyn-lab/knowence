@@ -704,7 +704,7 @@ const PROTOCOL_OPTIONS = [
 
 /** Field reference for parameters.spec.compat, per protocol and model type. */
 const COMPAT_DOC_URL =
-  'https://github.com/Tencent/WeKnora/blob/main/website-docs/03-features/06-models.md#协议兼容覆盖-compat-json'
+  'https://github.com/moronfranklyn-lab/knowence/tree/main/docs'
 
 /** Legacy thinking_control values still honoured by catalog.Resolve. */
 const LEGACY_THINKING_CONTROL_VALUES = ['none', 'enable_thinking', 'thinking_type', 'chat_template_kwargs'] as const

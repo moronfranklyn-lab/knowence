@@ -54,7 +54,7 @@
         {{ $t('tenantMember.sectionDescription') }}
         <a
           class="doc-link"
-          href="https://github.com/Tencent/WeKnora/blob/main/website-docs/03-features/01-tenant-auth.md"
+          href="https://github.com/moronfranklyn-lab/knowence/tree/main/docs"
           target="_blank"
           rel="noopener noreferrer"
         >

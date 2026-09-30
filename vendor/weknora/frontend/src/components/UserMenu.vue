@@ -493,13 +493,13 @@ const reopenGuide = () => {
 
 const openDocs = () => {
   menuVisible.value = false
-  window.open('https://github.com/Tencent/WeKnora/tree/main/website-docs', '_blank')
+  window.open('https://github.com/moronfranklyn-lab/knowence/tree/main/docs', '_blank')
 }
 
 // 打开 GitHub
 const openGithub = () => {
   menuVisible.value = false
-  window.open('https://github.com/Tencent/WeKnora', '_blank')
+  window.open('https://github.com/moronfranklyn-lab/knowence', '_blank')
 }
 
 // 注销
