@@ -9,6 +9,11 @@
 
 ![工作台](docs/images/workbench-new-chat.png)
 
+![带引用的回答](docs/images/chat-with-citations.png)
+
+> 上图底部模型选择器显示 **Qwen2.5-7B 本地（4060）**——检索、重排、向量化、生成四个环节全部本地完成。
+> 答案中的每条事实都挂着可点开的原文出处。
+
 ---
 
 ## 目录
