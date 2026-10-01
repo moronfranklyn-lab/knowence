@@ -159,41 +159,64 @@
 - Docker（平台节点）
 - 可选：一台带独显的机器做推理节点（无独显可只用云端 API）
 
-### 平台节点
+### 一键部署（推荐）
 
 ```bash
-# 1. 建网
+git clone <本仓库地址> knowence && cd knowence
+
+cp .env.example .env
+# 改掉 .env 里的三个必改项：DB_PASSWORD / JWT_SECRET / SYSTEM_AES_KEY
+
+./scripts/download-models.sh    # 下载本地模型（约 2.2GB，走 ModelScope 国内快源）
+docker compose up -d
+
+# 打开 http://localhost:8081
+```
+
+**只想起平台、不跑本地模型**：把 `docker-compose.yml` 里的 `embed` / `rerank` 注释掉，
+改用云端 API（在平台设置里配 embedding 与 rerank 模型）。
+
+**首次启动要等一会儿**：数据库迁移 + 模型加载（重排模型约 45 秒）。
+用 `docker compose ps` 看健康状态。
+
+### 手动部署（想了解每个组件在做什么）
+
+<details>
+<summary>展开：五个容器的 docker run 命令</summary>
+
+```bash
 docker network create knowence-net
 
-# 2. 起检索库（ParadeDB = PostgreSQL + pgvector + BM25）
-docker run -d --name knowence-db --network knowence-net \
+# 1. 检索库（PostgreSQL + pgvector + BM25）
+docker run -d --name knowence-db --network knowence-net --network-alias postgres \
   -e POSTGRES_PASSWORD=<你的密码> -e POSTGRES_DB=WeKnora \
   -v knowence-pgdata:/var/lib/postgresql/data paradedb/paradedb:v0.22.6-pg17
 
-# 3. 起本地向量服务（llama.cpp + bge-m3）
-#    注意：模型文件必须放 Docker 原生卷，放共享挂载会慢 9 倍（见部署实录坑 7）
+# 2. 本地向量服务（⚠️ 模型必须放 Docker 原生卷，见部署实录坑 7）
 docker run -d --name knowence-embed --network knowence-net --network-alias embed \
   -v knowence-models:/models:ro ghcr.nju.edu.cn/ggml-org/llama.cpp:server \
   -m /models/bge-m3-FP16.gguf --embedding --pooling cls -c 8192 -t 8
 
-# 4. 起本地重排服务
+# 3. 本地重排服务（⚠️ 阈值要设 -10，见部署实录坑 11）
 docker run -d --name knowence-rerank --network knowence-net --network-alias rerank \
   -v knowence-models:/models:ro ghcr.nju.edu.cn/ggml-org/llama.cpp:server \
   -m /models/bge-reranker-v2-m3-FP16.gguf --rerank -c 2048 -t 8
 
-# 5. 起后端
+# 4. 后端
 docker run -d --name knowence-app --network knowence-net --network-alias app -p 18080:8080 \
   -e DB_DRIVER=postgres -e DB_HOST=postgres -e DB_NAME=WeKnora \
   -e AUTO_MIGRATE=true -e RETRIEVE_DRIVER=postgres \
   -e SSRF_WHITELIST_EXTRA=embed,rerank,<推理节点IP> \
   -v knowence-data:/app/data wechatopenai/weknora-app:v0.8.2
 
-# 6. 起前端
+# 5. 前端
 docker run -d --name knowence-ui --network knowence-net -p 8081:80 \
   -e APP_HOST=knowence-app wechatopenai/weknora-ui:v0.8.2
 ```
 
 访问 `http://localhost:8081`，注册账号 → 添加模型 → 建知识库 → 上传文档。
+
+</details>
 
 ### 推理节点（可选，用于完全本地化）
 
@@ -262,7 +285,8 @@ New-NetFirewallRule -DisplayName "Ollama 11434" -Direction Inbound `
 | [docs/阶段文档/技术适配声明.md](docs/阶段文档/技术适配声明.md) | 选型结论与偏离说明 |
 | [docs/evidence/评测报告.md](docs/evidence/评测报告.md) | **RAG 效果评测：自建评测集、三组对照实验、阈值缺陷定位** |
 | [docs/evidence/bad-cases.md](docs/evidence/bad-cases.md) | **Bad Case 分析与方法论：4 个真实失败案例 + 归因顺序 + 评测盲区** |
-| [docs/BASE_LOCK.md](docs/BASE_LOCK.md) | 上游基线锁定 |
+| [docs/与上游的差异.md](docs/与上游的差异.md) | **改了上游什么：5 个新增文件 + 31 个修改文件，改动面与升级流程** |
+| [docs/BASE_LOCK.md](docs/BASE_LOCK.md) | 上游基线锁定与改动规则 |
 | [deploy/README-Windows推理节点.md](deploy/README-Windows推理节点.md) | Windows 推理节点部署（含国内快源） |
 
 ---

@@ -7467,10 +7467,10 @@ export default {
     workbenchGreeting: '오늘 지식으로 무엇을 해결할까요?',
     workbenchSub: '지식베이스에 질문하거나 여러 단계 작업을 맡기세요',
     quick: { doc: '문서 처리', research: '심층 조사', report: '보고서 생성', summary: '요점 정리' },
-    quickDocPrompt: '이 자료의 핵심 내용을 정리하고 출처를 표시해 주세요.',
-    quickResearchPrompt: '이 주제를 심층 검색하여 여러 출처의 관점을 비교해 주세요.',
-    quickReportPrompt: '지식베이스 내용으로 인용이 포함된 구조화 보고서를 작성해 주세요.',
-    quickSummaryPrompt: '최신 문서들의 핵심 결론을 5가지 요점으로 정리해 주세요.',
+    quickDocPrompt: '이 자료의 핵심 내용을 정리하고 출처를 표시해 주세요: ',
+    quickResearchPrompt: '이 주제를 심층 검색하여 여러 출처의 관점을 비교해 주세요: ',
+    quickReportPrompt: '지식베이스 내용으로 인용이 포함된 구조화 보고서를 작성해 주세요: ',
+    quickSummaryPrompt: '최신 문서들의 핵심 결론을 5가지 요점으로 정리해 주세요: ',
   },
 
 }

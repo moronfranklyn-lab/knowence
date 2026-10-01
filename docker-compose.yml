@@ -1,0 +1,168 @@
+# ============================================================================
+#  知微 Knowence · 一键部署
+#
+#  用法：
+#      cp .env.example .env      # 改掉里面的密钥
+#      ./scripts/download-models.sh   # 下载本地模型（约 6GB，走国内快源）
+#      docker compose up -d
+#      open http://localhost:8081
+#
+#  只想起平台、不跑本地模型？把 embed / rerank 两个服务注释掉，
+#  改用云端 API（在平台设置里配 embedding 与 rerank 模型即可）。
+# ============================================================================
+
+name: knowence
+
+services:
+  # ---------------------------------------------------------------- 检索库
+  # ParadeDB = PostgreSQL + pgvector（向量）+ pg_search（BM25 全文检索）
+  # 为什么不用嵌入式数据库：官方镜像的 SQLite 未编译 FTS5，
+  # 「向量+关键词」混合检索的关键词那一路会直接失败。详见 docs/阶段文档/本地部署实录.md 坑 1
+  postgres:
+    image: paradedb/paradedb:v0.22.6-pg17
+    container_name: knowence-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?请在 .env 里设置 DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-WeKnora}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      knowence-net:
+        aliases: [postgres]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-WeKnora}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ---------------------------------------------------------------- 本地向量
+  # 用 llama.cpp 跑 BGE-M3（1024 维），OpenAI 兼容 /v1/embeddings
+  #
+  # ⚠️ 关键：模型文件必须放在 Docker 原生卷里（下面的 knowence-models），
+  #    不要用宿主机目录 bind mount —— 否则 llama.cpp 的 mmap 会退化成
+  #    跨层读盘，实测推理速度差 9.4 倍（2.0 tok/s vs 18.7 tok/s）。
+  #    详见 docs/阶段文档/本地部署实录.md 坑 7
+  embed:
+    image: ${LLAMACPP_IMAGE:-ghcr.nju.edu.cn/ggml-org/llama.cpp:server}
+    container_name: knowence-embed
+    restart: unless-stopped
+    command: >
+      -m /models/${EMBED_MODEL_FILE:-bge-m3-FP16.gguf}
+      --embedding --pooling cls
+      --host 0.0.0.0 --port 8080
+      -c 8192 -t ${LLAMA_THREADS:-8}
+    volumes:
+      - models:/models:ro
+    networks:
+      knowence-net:
+        aliases: [embed]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 120s
+
+  # ---------------------------------------------------------------- 本地重排
+  # llama.cpp 的 --rerank 提供 Cohere 兼容的 /v1/rerank
+  #
+  # ⚠️ 阈值提醒：bge-reranker-v2-m3 输出的是**原始 logits**（约 -10~+10），
+  #    不是 0~1 归一化分数。平台默认阈值 0.3 等于「只保留排名第一」，
+  #    会把正确答案滤掉。建议在 Agent 配置里把 rerank_threshold 设为 -10。
+  #    详见 docs/阶段文档/本地部署实录.md 坑 11
+  rerank:
+    image: ${LLAMACPP_IMAGE:-ghcr.nju.edu.cn/ggml-org/llama.cpp:server}
+    container_name: knowence-rerank
+    restart: unless-stopped
+    command: >
+      -m /models/${RERANK_MODEL_FILE:-bge-reranker-v2-m3-FP16.gguf}
+      --rerank
+      --host 0.0.0.0 --port 8080
+      -c 2048 -t ${LLAMA_THREADS:-8}
+    volumes:
+      - models:/models:ro
+    networks:
+      knowence-net:
+        aliases: [rerank]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 120s
+
+  # ---------------------------------------------------------------- 后端
+  app:
+    image: ${APP_IMAGE:-wechatopenai/weknora-app:v0.8.2}
+    container_name: knowence-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_DRIVER: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:?请在 .env 里设置 DB_PASSWORD}
+      DB_NAME: ${DB_NAME:-WeKnora}
+      AUTO_MIGRATE: "true"
+      RETRIEVE_DRIVER: postgres
+      STORAGE_TYPE: local
+      LOCAL_STORAGE_BASE_DIR: /app/data/files
+      STREAM_MANAGER_TYPE: memory
+      JWT_SECRET: ${JWT_SECRET:?请在 .env 里设置 JWT_SECRET}
+      SYSTEM_AES_KEY: ${SYSTEM_AES_KEY:?请在 .env 里设置 SYSTEM_AES_KEY}
+      # 平台对用户可填的模型地址做 SSRF 校验，默认拒绝内网地址。
+      # 这里放行本 compose 内的服务别名，以及可选的「局域网推理节点」。
+      # 这是安全设计不是 bug —— 允许随便填地址就能被用来探测内网服务（坑 2）
+      SSRF_WHITELIST_EXTRA: >-
+        embed,knowence-embed,rerank,knowence-rerank,host.docker.internal${INFERENCE_NODE_IP:+,${INFERENCE_NODE_IP}}
+    volumes:
+      - appdata:/app/data
+    ports:
+      - "${APP_PORT:-18080}:8080"
+    networks:
+      knowence-net:
+        aliases: [app]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://127.0.0.1:8080/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  # ---------------------------------------------------------------- 前端
+  ui:
+    image: ${UI_IMAGE:-wechatopenai/weknora-ui:v0.8.2}
+    container_name: knowence-ui
+    restart: unless-stopped
+    depends_on:
+      - app
+    environment:
+      APP_HOST: app
+      APP_PORT: 8080
+    ports:
+      - "${UI_PORT:-8081}:80"
+    networks:
+      - knowence-net
+
+# ============================================================================
+#  卷说明
+#    pgdata   —— 数据库（元数据 + 分块 + 向量 + 关键词索引）
+#    appdata  —— 上传的原始文件
+#    models   —— 本地模型（GGUF），**必须是原生卷**，见 embed 服务注释
+# ============================================================================
+volumes:
+  pgdata:
+    name: knowence-pgdata
+  appdata:
+    name: knowence-data
+  models:
+    name: knowence-models
+
+networks:
+  knowence-net:
+    name: knowence-net

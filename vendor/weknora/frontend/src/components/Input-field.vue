@@ -2674,8 +2674,15 @@ defineExpose({
    * the user lands on the branch with the original question ready to edit —
    * the whole point of branching at a user message.
    */
-  prefill(text: string) {
+  async prefill(text: string) {
     query.value = text;
+    await focusInput();
+    // Select the seeded prompt so a fresh keystroke replaces it, but typing
+    // to edit still starts from the end if selection failed.
+    const textarea = getTextareaEl();
+    if (textarea?.isConnected) {
+      try { textarea.setSelectionRange(0, text.length); } catch { /* noop */ }
+    }
   }
 });
 

@@ -90,12 +90,12 @@
                                 </div>
                             </transition>
 
-                            <!-- Knowence 工作台层：空状态问候 + 快捷能力标签 -->
-                            <div class="knw-workspace-hero">
+                            <!-- Knowence 工作台层：空状态问候 + 快捷能力标签（点选填入输入框并选中，可直接改写） -->
+                            <div class="knw-workspace-hero knw-workspace-hero--center">
                                 <h2 class="knw-workspace-hero__title">{{ t('knowence.workbenchGreeting') }}</h2>
                                 <p class="knw-workspace-hero__sub">{{ t('knowence.workbenchSub') }}</p>
                             </div>
-                            <div class="knw-quick-tags">
+                            <div class="knw-quick-tags knw-quick-tags--center">
                                 <button v-for="q in knowenceQuickPrompts" :key="q.key" type="button"
                                     class="knw-quick-tag" @click="applyKnowenceQuickPrompt(q)">
                                     <span class="knw-quick-tag__dot"></span>{{ t(q.key) }}

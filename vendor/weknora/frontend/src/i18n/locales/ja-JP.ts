@@ -7467,10 +7467,10 @@ export default {
     workbenchGreeting: '今日は何を知識で片付けますか？',
     workbenchSub: 'ナレッジベースに質問、または多段階タスクを任せる',
     quick: { doc: 'ドキュメント', research: '深掘り調査', report: 'レポート作成', summary: '要点整理' },
-    quickDocPrompt: 'この資料の核心内容を整理し、出典を明記してください。',
-    quickResearchPrompt: 'この問題を深く検索し、複数の情報源の見解を比較してください。',
-    quickReportPrompt: 'ナレッジベースから引用付きの構造化レポートを作成してください。',
-    quickSummaryPrompt: '最新の資料の重要結論を5点にまとめてください。',
+    quickDocPrompt: 'この資料の核心内容を整理し、出典を明記してください：',
+    quickResearchPrompt: 'この問題を深く検索し、複数の情報源の見解を比較してください：',
+    quickReportPrompt: 'ナレッジベースから引用付きの構造化レポートを作成してください：',
+    quickSummaryPrompt: '最新の資料の重要結論を5点にまとめてください：',
   },
 
 }

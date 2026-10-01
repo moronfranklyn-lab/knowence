@@ -14,6 +14,11 @@
   padding: 0 var(--app-space-2) var(--app-space-6);
 }
 
+.knw-workspace-hero--center {
+  align-items: center;
+  text-align: center;
+}
+
 .knw-workspace-hero__title {
   font-size: var(--app-text-3xl);
   font-weight: 600;
@@ -37,31 +42,38 @@
 .knw-quick-tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 30px;
-  padding: 0 var(--app-space-3);
+  gap: 7px;
+  height: 34px;
+  padding: 0 var(--app-space-4);
   border-radius: var(--app-radius-pill);
   border: 1px solid var(--td-component-stroke);
   background: var(--td-bg-color-container);
   color: var(--td-text-color-secondary);
-  font-size: var(--app-text-sm);
+  font-size: var(--app-text-base);
   cursor: pointer;
   transition: color var(--app-motion-fast), border-color var(--app-motion-fast),
-    background-color var(--app-motion-fast);
+    background-color var(--app-motion-fast), box-shadow var(--app-motion-fast),
+    transform var(--app-motion-fast);
+}
 
-  &:hover {
-    color: var(--td-brand-color);
-    border-color: var(--td-brand-color);
-    background: color-mix(in srgb, var(--td-brand-color) 6%, transparent);
-  }
+.knw-quick-tag:hover {
+  color: var(--td-brand-color);
+  border-color: color-mix(in srgb, var(--td-brand-color) 55%, transparent);
+  background: color-mix(in srgb, var(--td-brand-color) 6%, transparent);
+  box-shadow: 0 2px 10px -4px color-mix(in srgb, var(--td-brand-color) 35%, transparent);
+  transform: translateY(-1px);
+}
 
-  &__dot {
-    width: 6px;
-    height: 6px;
-    border-radius: var(--td-radius-circle);
-    background: linear-gradient(135deg, var(--knw-ink-500, #1d3183), var(--knw-electric, #38bdf8));
-    flex-shrink: 0;
-  }
+.knw-quick-tag:active {
+  transform: translateY(0);
+}
+
+.knw-quick-tag__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--td-radius-circle);
+  background: linear-gradient(135deg, var(--knw-ink-500, #1d3183), var(--knw-electric, #38bdf8));
+  flex-shrink: 0;
 }
 
 /* ShapeWaves 背景层：需要宿主容器 position:relative */
@@ -103,5 +115,5 @@
 
 .knw-quick-tags--center {
   justify-content: center;
-  margin: var(--app-space-4) 0 0;
+  margin: var(--app-space-4) 0 var(--app-space-6);
 }

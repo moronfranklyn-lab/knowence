@@ -7467,10 +7467,10 @@ export default {
     workbenchGreeting: 'What should knowledge do for you today?',
     workbenchSub: 'Ask against a knowledge base, or hand over a multi-step task',
     quick: { doc: 'Documents', research: 'Deep Research', report: 'Report', summary: 'Summarize' },
-    quickDocPrompt: 'Organize the core content of these materials and mark the sources.',
-    quickResearchPrompt: 'Run a deep retrieval on this question and compare views across sources.',
-    quickReportPrompt: 'Generate a structured report from the knowledge base with citations.',
-    quickSummaryPrompt: 'Condense the key conclusions of the latest documents into 5 points.',
+    quickDocPrompt: 'Organize the core content of these materials and mark the sources: ',
+    quickResearchPrompt: 'Run a deep retrieval on this question and compare views across sources: ',
+    quickReportPrompt: 'Generate a structured report from the knowledge base with citations: ',
+    quickSummaryPrompt: 'Condense the key conclusions of the latest documents into 5 points: ',
   },
 
 }

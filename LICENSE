@@ -1,0 +1,54 @@
+MIT License
+
+Copyright (c) 2026 Knowence contributors
+
+---
+
+## 关于本项目与上游
+
+Knowence（知微）是基于 [Tencent/WeKnora](https://github.com/Tencent/WeKnora) 的衍生作品。
+
+| 项 | 说明 |
+| --- | --- |
+| 上游仓库 | https://github.com/Tencent/WeKnora |
+| 上游版本 | v0.8.2 |
+| 上游许可证 | MIT |
+| 上游版权 | Copyright (C) 2025 Tencent. All rights reserved. |
+| 上游许可全文 | 见 [`vendor/weknora/LICENSE`](vendor/weknora/LICENSE) |
+| 上游三方组件声明 | 见 [`vendor/weknora/THIRD_PARTY_NOTICES.md`](vendor/weknora/THIRD_PARTY_NOTICES.md) |
+
+**本项目（Knowence 自有部分）同样以 MIT 许可证发布**，不附加任何超越 MIT 的限制。
+
+`vendor/weknora/` 目录为上游代码快照，**保留其原始许可证与版权声明，不适用本文件的版权行**。
+该目录内含的第三方组件（详见上游 `THIRD_PARTY_NOTICES.md` 与 `licenses/` 目录）适用其各自的许可条款，
+使用者须自行遵守。
+
+---
+
+## MIT License 全文
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## 商标说明
+
+「Knowence」「知微」为本项目使用的名称，**不主张任何商标权**。
+上游名称「WeKnora」「Tencent」「腾讯」为其各自权利人的商标，
+本项目与 Tencent 无隶属或背书关系。

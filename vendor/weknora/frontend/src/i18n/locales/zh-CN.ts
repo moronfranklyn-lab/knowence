@@ -7469,10 +7469,10 @@ export default {
     workbenchGreeting: '今天想让知识替你做什么？',
     workbenchSub: '选择资料库提问，或直接布置一个多步骤任务',
     quick: { doc: '文档处理', research: '深度研究', report: '生成报告', summary: '要点总结' },
-    quickDocPrompt: '帮我整理这份资料的核心内容，并标注出处。',
-    quickResearchPrompt: '围绕这个问题做一轮深度检索，汇总不同来源的观点。',
-    quickReportPrompt: '基于资料库内容生成一份结构化报告，附引用来源。',
-    quickSummaryPrompt: '把最新几份文档的关键结论压缩成 5 条要点。',
+    quickDocPrompt: '帮我整理这份资料的核心内容，并标注出处：',
+    quickResearchPrompt: '围绕这个问题做一轮深度检索，汇总不同来源的观点：',
+    quickReportPrompt: '基于资料库内容生成一份结构化报告，附引用来源：',
+    quickSummaryPrompt: '把最新几份文档的关键结论压缩成 5 条要点：',
   },
 
 }

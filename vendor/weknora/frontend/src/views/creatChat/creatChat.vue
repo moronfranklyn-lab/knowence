@@ -1,11 +1,11 @@
 <template>
     <div class="dialogue-wrap">
         <div class="dialogue-answers">
-            <div class="dialogue-title" style="--wails-draggable: drag">
+            <div class="dialogue-title knw-workspace-hero__title" style="--wails-draggable: drag">
                 <span style="--wails-draggable: drag">{{ $t('createChat.title') }}</span>
             </div>
-            <!-- Knowence 工作台层：品牌副句 + 快捷能力标签（点选后填入输入框） -->
-            <p class="knw-chat-sub">{{ $t('knowence.workbenchSub') }}</p>
+            <!-- Knowence 工作台层：品牌副句 + 快捷能力标签（点选后填入输入框并选中，可直接改写） -->
+            <p class="knw-chat-sub knw-workspace-hero__sub">{{ $t('knowence.workbenchSub') }}</p>
             <div class="knw-quick-tags knw-quick-tags--center">
                 <button v-for="q in knowenceQuickPrompts" :key="q.key" type="button" class="knw-quick-tag"
                     @click="applyKnowenceQuickPrompt(q)">
@@ -330,7 +330,12 @@ async function openProjectDir() {
     align-items: center;
     width: 100%;
     max-width: 960px;
-    gap: 24px;
+    gap: var(--app-space-2);
+
+    // hero 三连（标题/副句/标签）之后与推荐问题区拉开一档呼吸
+    .knw-quick-tags--center {
+        margin-bottom: var(--app-space-6);
+    }
 
     :deep(.answers-input) {
         position: static;
@@ -403,10 +408,12 @@ async function openProjectDir() {
     display: flex;
     color: var(--td-text-color-primary);
     font-family: var(--app-font-family);
-    font-size: 28px;
+    font-size: var(--app-text-4xl);
     font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.35;
     align-items: center;
-    margin-bottom: 0;
+    margin-bottom: var(--app-space-2);
 
     .icon {
         display: flex;
