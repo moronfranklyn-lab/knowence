@@ -49,7 +49,12 @@
                           "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-ibm-plex-mono:   'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* ---- Typography · Scale（令牌原值）---- */
+  /* ---- Typography · Scale（@theme 原值）----
+     ⚠️ 两套令牌对同一字号给出不同行高/字距，以更具体的为准：
+          @theme   --text-display 59px / lineHeight 1.26 / tracking -1.12px (= -0.019em)
+          DTCG     typography.5xl-2 59px / lineHeight 1.41 / tracking -0.008em
+        DTCG 那份是逐元素实测、且带字体族，@theme 是抽象过的尺度，
+        所以下文用 DTCG 的 --leading-display-r / --tracking-display-r。 */
   --text-micro:11px;        --leading-micro:1.82;        --tracking-micro:1px;
   --text-caption:14px;      --leading-caption:1.5;
   --text-body-sm:16px;      --leading-body-sm:1.54;
@@ -125,13 +130,32 @@
   --ext-code-bg:#00031c;     /* 代码块底 */
   --ext-code-fg:#c9d4ff;     /* 代码块文字 */
 
+  /* ---- 深色页面的文字层级 ----
+     令牌说明里写明 slate-body / fog / mist / silver-border / carbon 是给
+     **浅色表面**用的。实测对比度（底色 midnight-ink #00052e）：
+         slate-body 2.55:1  ❌ 远低于 AA 正文门槛 4.5
+         fog        3.82:1  ⚠️ 同样不达标
+         mist       5.46:1  ✓ 勉强可用于三级文字
+         halo-violet 9.78:1 ✅
+         paper      19.79:1 ✅
+     所以深色页上用 halo-violet 承载次级文字，paper 承载正文，
+     slate-body / fog 只保留给将来可能出现的浅色区块。 */
+  --text-on-dark:var(--color-paper);
+  --text-on-dark-dim:var(--color-halo-violet);
+  --text-on-dark-faint:var(--color-mist);
+
   /* ---- 派生：深色页面需要的分隔线（令牌未给，按 midnight-ink 提亮得出）---- */
   --line:      #1b2364;
   --line-soft: #131a4d;
 
   /* ---- 派生：字号阶的响应式收缩（小屏用，桌面端等于令牌原值）---- */
   --text-display-r:     clamp(32px, 5.2vw, var(--text-display));
+  /* DTCG typography 的实测行高/字距（em 单位，随字号缩放） */
+  --leading-display-r:  1.41;    /* typography.5xl-2 */
+  --tracking-display-r: -0.008em;
   --text-heading-r:     clamp(24px, 2.9vw, var(--text-heading));
+  --leading-heading-r:  1.2;      /* typography.4xl */
+  --tracking-heading-r: -0.012em;
   --text-heading-lg-r:  clamp(30px, 4.0vw, var(--text-heading-lg));
   --text-subheading-r:  clamp(19px, 2.0vw, var(--text-subheading));
 
@@ -156,8 +180,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 
 /* 小标签 · 令牌的 micro 级：11px / 行高 1.82 / 字距 1px */
 .tag{
-  font-size:var(--text-micro);line-height:var(--leading-micro);letter-spacing:var(--tracking-micro);
-  font-weight:500;text-transform:uppercase;color:var(--color-fog);
+  font-family:var(--font-ibm-plex-mono);   /* 令牌 typography.xs 指定 IBM Plex Mono */
+  font-size:var(--text-micro);line-height:var(--leading-micro);
+  letter-spacing:.091em;                    /* token: 0.091em（= 11px 下 1px）*/
+  font-weight:var(--font-weight-regular);   /* token: 400，我原先写了 500 */
+  text-transform:uppercase;color:var(--text-on-dark-dim);
 }
 
 /* 按钮 · 令牌的 radius-md = 4px（不是直角，我之前看错了） */
@@ -222,8 +249,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 .hero__h1{
   margin:0 auto;max-width:20em;font-weight:var(--font-weight-bold);
   font-size:var(--text-display-r);
-  line-height:var(--leading-display);
-  letter-spacing:var(--tracking-display);
+  line-height:var(--leading-display-r);
+  letter-spacing:var(--tracking-display-r);
 }
 .hero__p{
   margin:var(--spacing-30) auto 0;max-width:54ch;color:var(--color-halo-violet);
@@ -232,7 +259,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 .hero__acts{margin-top:var(--spacing-40);display:flex;gap:var(--spacing-15);
   justify-content:center;flex-wrap:wrap}
 .hero__note{margin-top:var(--spacing-23);font-size:var(--text-micro);
-  line-height:var(--leading-micro);letter-spacing:var(--tracking-micro);color:var(--color-slate-body)}
+  line-height:var(--leading-micro);letter-spacing:var(--tracking-micro);color:var(--text-on-dark-faint)}
 
 /* 浮动卡片 · 令牌的 radius-lg = 8px */
 .fc{
@@ -253,12 +280,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 .fc__list li{display:grid;grid-template-columns:12px 1fr auto;gap:var(--spacing-10);
   padding:var(--spacing-4) 0;align-items:center}
 .fc__list i{width:6px;height:6px;background:var(--color-arc-cyan);transform:rotate(45deg);display:block}
-.fc__list em{font-style:normal;color:var(--color-fog)}
+.fc__list em{font-style:normal;color:var(--text-on-dark-dim)}
 .fc__kv{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-10);
   margin-top:var(--spacing-10)}
 .fc__kv b{display:block;font-size:var(--text-body-sm);font-weight:600;
   color:var(--color-paper);letter-spacing:var(--tracking-subheading)}
-.fc__kv span{color:var(--color-fog);font-size:10px;letter-spacing:var(--tracking-micro);
+.fc__kv span{color:var(--text-on-dark-dim);font-size:10px;letter-spacing:var(--tracking-micro);
   text-transform:uppercase}
 
 .fc--1{left:max(2vw,var(--spacing-16));top:29%}
@@ -272,8 +299,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 .sec{padding-top:var(--sect)}
 .sec__tag{margin-bottom:var(--spacing-15)}
 .sec__h{margin:0 0 var(--spacing-20);font-weight:var(--font-weight-bold);
-  font-size:var(--text-heading-r);line-height:var(--leading-heading);
-  letter-spacing:var(--tracking-heading)}
+  font-size:var(--text-heading-r);line-height:var(--leading-heading-r);
+  letter-spacing:var(--tracking-heading-r)}
 .sec__lead{margin:0 0 var(--spacing-43);color:var(--color-halo-violet);
   font-size:var(--text-body);line-height:var(--leading-body);max-width:62ch}
 
@@ -289,17 +316,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 .stat__k{margin-top:var(--spacing-15);font-size:var(--text-body-sm);font-weight:500;
   line-height:var(--leading-body-sm)}
 .stat__d{margin-top:var(--spacing-4);font-size:var(--text-caption);line-height:var(--leading-caption);
-  color:var(--color-fog)}
+  color:var(--text-on-dark-dim)}
 .stat__src{display:inline-block;margin-top:var(--spacing-15);font-size:var(--text-micro);
-  letter-spacing:var(--tracking-micro);color:var(--color-fog);
-  border-bottom:1px solid var(--color-slate-body)}
+  letter-spacing:var(--tracking-micro);color:var(--text-on-dark-dim);
+  border-bottom:1px solid color-mix(in srgb,var(--color-halo-violet) 42%,transparent)}
 .stat__src:hover{color:var(--color-arc-cyan);border-bottom-color:var(--color-arc-cyan)}
 
 /* ---------------------------------------------------------------- 产品截图 */
 .shot{border:1px solid var(--line);background:var(--surface-violet-wash);overflow:hidden;border-radius:var(--radius-images)}
 .shot img{width:100%}
 .shot__cap{margin-top:var(--spacing-20);font-size:var(--text-caption);line-height:var(--leading-caption);
-  color:var(--color-fog);max-width:64ch}
+  color:var(--text-on-dark-dim);max-width:64ch}
 
 /* ---------------------------------------------------------------- 能力 */
 .caps{margin:0;padding:0;list-style:none;border-top:1px solid var(--line-soft)}
@@ -339,7 +366,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
   font:500 var(--text-micro)/2 var(--font-ibm-plex-mono);color:var(--ext-pit-number);
   letter-spacing:var(--tracking-micro)}
 .pits em{display:block;margin-top:var(--spacing-4);font-style:normal;
-  font-size:var(--text-caption);line-height:var(--leading-caption);color:var(--color-fog)}
+  font-size:var(--text-caption);line-height:var(--leading-caption);color:var(--text-on-dark-dim)}
 
 /* ---------------------------------------------------------------- 下载 */
 .dl{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(var(--spacing-30),5vw,var(--spacing-80));
@@ -357,13 +384,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 pre{margin:var(--spacing-16) 0 0;background:var(--ext-code-bg);border:1px solid var(--line);
   border-radius:var(--radius-tags);padding:var(--card-padding);
   overflow-x:auto;font-size:13.5px;line-height:1.85;color:var(--ext-code-fg)}
-pre .c{color:var(--color-slate-body)}
+pre .c{color:var(--color-mist)}
 pre .k{color:var(--color-arc-cyan)}
 @media (max-width:820px){.dl{grid-template-columns:1fr}}
 
 /* ---------------------------------------------------------------- 页脚 */
 .foot{margin-top:var(--sect);border-top:1px solid var(--line-soft);
-  padding:var(--spacing-43) 0 var(--spacing-80);color:var(--color-fog);
+  padding:var(--spacing-43) 0 var(--spacing-80);color:var(--text-on-dark-faint);
   font-size:var(--text-caption);line-height:var(--leading-caption)}
 .foot__nav{display:flex;flex-wrap:wrap;gap:var(--spacing-10) var(--spacing-30);
   margin-bottom:var(--spacing-26)}
