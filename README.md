@@ -7,6 +7,9 @@
 
 ![登录页](docs/images/login-shapewaves.png)
 
+> **官网（功能展示与下载入口）**：<https://moronfranklyn-lab.github.io/knowence/>
+> 页面源码在 [`docs/index.html`](docs/index.html)，随仓库一起发布，无构建步骤。
+
 ![工作台](docs/images/workbench-new-chat.png)
 
 ![带引用的回答](docs/images/chat-with-citations.png)
