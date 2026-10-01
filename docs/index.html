@@ -228,12 +228,27 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 /* 与产品登录页同一手法：深靛画布底与背景相加混合，黑=隐形、亮点发光。
    少了这一层，深色画布会把背景整片盖住。 */
 .waves canvas{mix-blend-mode:screen}
-.waves-fallback{position:absolute;inset:0;z-index:0;opacity:0;transition:opacity .6s ease;
+/* 降级层：WebGPU 不可用时显示。原来是一张完全静止的点阵图，
+   等于那部分用户看不到任何动效。改成纯 CSS 动效，不依赖 WebGPU。
+   只动 transform 与 opacity，符合动效规范（GPU 合成，不触发布局重绘）。 */
+.waves-fallback{position:absolute;inset:0;z-index:0;opacity:0;
+  transition:opacity .6s ease;overflow:hidden;
+  -webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 12%,transparent 74%);
+          mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 12%,transparent 74%)}
+.waves-fallback::before{
+  content:'';position:absolute;inset:-28px;
   background-image:radial-gradient(
     color-mix(in srgb,var(--color-halo-violet) 46%,transparent) 1.1px,transparent 1.2px);
   background-size:14px 14px;
-  -webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 12%,transparent 74%);
-          mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 12%,transparent 74%)}
+  /* 位移正好一个点距，循环无接缝 */
+  animation:fallbackDrift 26s linear infinite,
+            fallbackBreathe 7s ease-in-out infinite;
+}
+@keyframes fallbackDrift{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(14px,14px,0)}
+}
+@keyframes fallbackBreathe{0%,to{opacity:.62}50%{opacity:1}}
 .waves-fallback.is-on{opacity:1}
 /* 文字直接压在点阵上会读不清。用一层径向遮罩：
    中心压暗保证正文可读，四周留出点阵与「知微」字形。 */
@@ -479,6 +494,7 @@ to{opacity:1}}
   .btn{transition:none}
   .btn:hover,.btn:active{transform:none}
   .waves-fallback{transition:none}
+  .waves-fallback::before{animation:none;opacity:.8}
 }
 @media (max-width:960px){
   .top__nav{display:none}
@@ -793,7 +809,7 @@ to{opacity:1}}
         fade: 0.35,
         glow: 0.4,
         splashStrength: 0.4,
-        speed: 0.7,
+        speed: 1.0,
         onError: function (e) { showFallback(e && e.message ? e.message : String(e)); }
       });
     } catch (e) {
