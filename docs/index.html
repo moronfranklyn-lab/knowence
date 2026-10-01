@@ -377,30 +377,51 @@ pre .k{color:var(--color-arc-cyan)}
 .index span{display:block;color:var(--color-halo-violet);
   font-size:var(--text-caption);line-height:var(--leading-caption)}
 
-/* ---------------------------------------------------------------- 部署形态
-   版式：非对称分栏（左窄右宽），与能力区的等宽双列不同。 */
-.split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
-  gap:clamp(var(--spacing-30),5vw,var(--spacing-80));align-items:start}
-.split__aside{display:grid;gap:var(--spacing-16)}
-.split__main p{margin:0 0 var(--spacing-20);color:var(--color-halo-violet);
-  font-size:var(--text-body);line-height:var(--leading-body)}
-.split__main p:last-child{margin-bottom:0}
-.split__main .muted{color:var(--color-mist);font-size:var(--text-caption);
-  line-height:var(--leading-caption)}
-.split__main a{color:var(--color-halo-violet);
-  border-bottom:1px solid color-mix(in srgb,var(--color-halo-violet) 42%,transparent)}
-.split__main a:hover{color:var(--color-arc-cyan);border-bottom-color:var(--color-arc-cyan)}
-.node{border:1px solid var(--line);background:var(--surface-violet-wash);
-  padding:var(--card-padding);border-radius:var(--radius-cards)}
-.node__role{margin-bottom:var(--spacing-10)}
-.node__t{font-weight:var(--font-weight-bold);font-size:var(--text-body-sm);
-  line-height:var(--leading-body-sm);color:var(--color-paper);
-  margin-bottom:var(--spacing-15)}
-.node ul{margin:0;padding:0;list-style:none;font-size:var(--text-caption);
-  line-height:var(--leading-caption);color:var(--color-halo-violet)}
-.node li{padding:var(--spacing-4) 0 var(--spacing-4) var(--spacing-16);position:relative}
-.node li::before{content:'';position:absolute;left:0;top:14px;width:6px;height:1px;
-  background:var(--color-arc-cyan)}
+/* ---------------------------------------------------------------- 框架图
+   版式：分层带图。Harness 层用填充面与描边强调，模型层用虚线表示可插拔。 */
+.arch{display:grid;margin-top:var(--spacing-30)}
+.arch__band{border:1px solid var(--line);border-radius:var(--radius-cards);
+  padding:var(--spacing-20) var(--spacing-24)}
+.arch__band--io,.arch__band--model{display:flex;align-items:center;
+  gap:var(--spacing-20);flex-wrap:wrap}
+.arch__band--core{background:var(--surface-violet-wash);
+  border-color:color-mix(in srgb,var(--color-signal-blue) 72%,transparent);
+  padding:var(--spacing-26) var(--spacing-24)}
+.arch__band--model{border-style:dashed;background:transparent}
+.arch__label{flex:none;font-family:var(--font-ibm-plex-mono);font-weight:400;
+  font-size:var(--text-micro);letter-spacing:.091em;text-transform:uppercase;
+  color:var(--color-mist)}
+.arch__items{display:flex;gap:var(--spacing-10);flex-wrap:wrap}
+.arch__items span{border:1px solid var(--line);border-radius:var(--radius-tags);
+  padding:var(--spacing-4) var(--spacing-10);font-size:var(--text-caption);
+  color:var(--color-halo-violet)}
+.arch__note{flex:1 1 260px;margin:0;font-size:var(--text-caption);
+  line-height:var(--leading-caption);color:var(--color-mist)}
+.arch__head{margin-bottom:var(--spacing-20)}
+.arch__head b{display:block;font-weight:var(--font-weight-bold);
+  font-size:var(--text-body);line-height:var(--leading-body);color:var(--color-paper)}
+.arch__head span{font-size:var(--text-caption);color:var(--color-halo-violet)}
+.arch__grid{margin:0;padding:0;list-style:none;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--spacing-10)}
+.arch__grid li{border:1px solid color-mix(in srgb,var(--color-signal-blue) 34%,transparent);
+  border-radius:var(--radius-tags);padding:var(--spacing-15);min-width:0;
+  background:color-mix(in srgb,var(--color-midnight-ink) 62%,transparent)}
+.arch__grid b{display:block;font-weight:var(--font-weight-bold);
+  font-size:var(--text-caption);color:var(--color-arc-cyan);
+  margin-bottom:var(--spacing-4)}
+.arch__grid span{display:block;font-size:var(--text-micro);line-height:1.62;
+  color:var(--color-halo-violet)}
+.arch__link{display:grid;justify-items:center;gap:var(--spacing-4);
+  padding:var(--spacing-10) 0;color:var(--color-mist);
+  font-size:var(--text-micro);letter-spacing:.06em}
+.arch__link i{display:block;width:1px;height:16px;
+  background:linear-gradient(var(--color-signal-blue),transparent)}
+.arch__link i:last-child{background:linear-gradient(transparent,var(--color-signal-blue));
+  transform:rotate(180deg)}
+@media (max-width:880px){
+  .arch__grid{grid-template-columns:1fr}
+  .arch__band{padding:var(--spacing-16)}
+}
 
 /* ---------------------------------------------------------------- 踩坑
    版式：编号单列列表。编号在此有实际功能（文档里按编号互相引用），不是装饰。 */
@@ -520,10 +541,10 @@ to{opacity:1}}
       <article class="bento__lead">
         <h2>数据不出内网</h2>
         <p>
-          平台节点负责检索与治理，推理节点负责生成，两者都在你的内网里。
-          对话、向量、重排三类模型可以全部本地部署，没有一条请求发往外部服务。
+          文档解析、向量化、检索、生成，整条链路都跑在你自己的机器上。
+          接入层、编排层、存储层都在内网，没有一条请求发往外部服务。
         </p>
-        <p class="bento__note">想先用云端跑起来也行。把 compose 里两个本地模型服务注释掉即可，平台功能不受影响。</p>
+        <p class="bento__note">只想先用云端跑起来也行。模型层是可插拔的，换掉接入地址即可，平台功能不受影响。</p>
       </article>
 
       <article class="bento__side">
@@ -532,8 +553,8 @@ to{opacity:1}}
       </article>
 
       <article class="bento__side">
-        <h3>一张消费级显卡跑得动</h3>
-        <p>7B 模型 Q4 量化，8GB 显存，生成速度 48.9 tok/s，单次问答端到端 8.8 秒。</p>
+        <h3>模型可插拔</h3>
+        <p>对话、向量、重排三类模型独立配置，走同一套接口。换模型改一行配置，业务代码不用动。</p>
       </article>
     </div>
   </section>
@@ -546,14 +567,18 @@ to{opacity:1}}
     </figure>
 
     <div class="proof">
-      <p class="proof__lead">上面是工作台的真实截图，模型选择器显示的是本地部署的 Qwen2.5-7B。</p>
+      <p class="proof__lead">
+        上面是工作台的真实截图，右下角的模型选择器接什么由你决定。
+        下面三项衡量的是平台本身。
+      </p>
       <dl class="proof__list">
-        <div><dt>48.9 tok/s</dt><dd>7B 模型生成速度，8GB 显存，GPU 利用率 100%</dd></div>
-        <div><dt>8.8 秒</dt><dd>一次完整问答：混合检索、重排、生成、引用回填</dd></div>
-        <div><dt>1.0000</dt><dd>Precision / Recall / NDCG / MRR / MAP 六项，20 段语料 32 题</dd></div>
+        <div><dt>1.0000</dt><dd>检索指标六项全满：Precision、Recall、NDCG@3、NDCG@10、MRR、MAP。这一项衡量的是编排层，与你用哪个模型无关</dd></div>
+        <div><dt>62 类</dt><dd>写入审计日志的事件类型。谁问了什么、看了哪些分块，都可追</dd></div>
+        <div><dt>4 级</dt><dd>角色权限模型，配合业务域知识库隔离</dd></div>
       </dl>
       <p class="proof__foot">
-        每组数字都能在仓库里查到原始记录，包括当时的日志与失败案例：
+        生成速度取决于你选的模型，不是平台的指标。我们用 Qwen2.5-7B 做示例配置测到 48.9 tok/s，
+        端到端 8.8 秒，仅供参照。平台的数字与全部失败案例都能在仓库里查到原始记录：
         <a href="阶段文档/本地部署实录.md">部署实录</a>、
         <a href="evidence/评测报告.md">评测报告</a>、
         <a href="evidence/bad-cases.md">失败案例</a>。
@@ -580,54 +605,52 @@ to{opacity:1}}
     </ul>
   </section>
 
-  <!-- ============================================================ 部署形态
-       版式：非对称分栏，左窄右宽 -->
-  <section class="wrap sec" id="deploy">
-    <h2 class="sec__h">推理吃显卡，平台吃磁盘</h2>
+  <!-- ============================================================ 框架
+       版式：分层带图。宣传重点是中间的 Harness 层，模型层降为最下方的可插拔槽位。 -->
+  <section class="wrap sec" id="arch">
+    <h2 class="sec__h">知微是一个 Harness</h2>
     <p class="sec__lead">
-      两者职责不同，合在一台机器上会互相抢资源。拆开之后，推理节点可以随时加一台。
+      模型本身不是这个产品。你用自己的模型，知微提供它们外面那层编排、检索、权限与审计。
+      换成别家的模型，这一层不用重写。
     </p>
 
-    <div class="split">
-      <div class="split__aside">
-        <div class="node">
-          <div class="node__role tag">平台节点</div>
-          <div class="node__t">检索与治理</div>
-          <ul>
-            <li>向量与关键词混合检索</li>
-            <li>重排与引用回填</li>
-            <li>本地向量化</li>
-            <li>账号、权限、审计</li>
-          </ul>
-        </div>
-        <div class="node">
-          <div class="node__role tag">推理节点</div>
-          <div class="node__t">生成</div>
-          <ul>
-            <li>Qwen2.5-7B，Q4 量化，约 4.7GB</li>
-            <li>48.9 tok/s</li>
-            <li>无状态，可独立扩容</li>
-            <li>不持久化任何业务数据</li>
-          </ul>
+    <div class="arch">
+      <div class="arch__band arch__band--io">
+        <span class="arch__label">接入</span>
+        <div class="arch__items">
+          <span>浏览器</span><span>企业 IM</span><span>你的应用</span>
         </div>
       </div>
 
-      <div class="split__main">
-        <p>
-          平台节点承担检索、重排、向量化与权限治理，是唯一持有业务数据的地方。
-          推理节点只接收当前这一问所需的检索片段，算完即弃，不落盘。
-        </p>
-        <p>
-          节点之间走内网 HTTP。推理节点可以是另一台带显卡的机器，也可以就是本机。
-          换成云端 API 时，这条链路的目标地址改一行配置即可。
-        </p>
-        <p class="muted">
-          实测环境是一台 Mac 作平台节点，一台 Windows 加 RTX 4060 作推理节点。
-          这套踩坑记录见 <a href="阶段文档/本地部署实录.md">部署实录</a>。
-        </p>
+      <div class="arch__link"><i></i><span>HTTP API</span><i></i></div>
+
+      <div class="arch__band arch__band--core">
+        <div class="arch__head">
+          <b>知微 Harness</b>
+          <span>平台自己实现的编排与治理层，也是这个项目的全部内容</span>
+        </div>
+        <ul class="arch__grid">
+          <li><b>检索编排</b><span>向量与关键词双路召回，重排之后把原文出处回填到结论上</span></li>
+          <li><b>Agent 循环</b><span>ReAct 推理加工具调用。危险操作挂起等确认，不可逆的默认拒绝</span></li>
+          <li><b>模型路由</b><span>对话、向量、重排三类独立配置，统一接口，可热插拔</span></li>
+          <li><b>权限治理</b><span>四级角色、业务域知识库隔离，按角色决定能看什么能做什么</span></li>
+          <li><b>人工兜底</b><span>规则化转人工。命中敏感类别或检索为空时，连材料一起转过去</span></li>
+          <li><b>全链路审计</b><span>62 类事件留痕。谁在什么时候问了什么、看了哪些分块，都可追</span></li>
+        </ul>
+      </div>
+
+      <div class="arch__link"><i></i><span>统一接口，可插拔</span><i></i></div>
+
+      <div class="arch__band arch__band--model">
+        <span class="arch__label">模型层</span>
+        <div class="arch__items">
+          <span>对话模型</span><span>向量模型</span><span>重排模型</span>
+        </div>
+        <p class="arch__note">本地部署或云端 API 都可以，选哪个由你决定。平台不绑定任何一家。</p>
       </div>
     </div>
   </section>
+
 
   <!-- ============================================================ 踩坑
        版式：编号列表。这块是与其他同类项目差异最大的地方，保留全部 11 条。 -->
