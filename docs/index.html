@@ -228,27 +228,40 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 /* 与产品登录页同一手法：深靛画布底与背景相加混合，黑=隐形、亮点发光。
    少了这一层，深色画布会把背景整片盖住。 */
 .waves canvas{mix-blend-mode:screen}
-/* 降级层：WebGPU 不可用时显示。原来是一张完全静止的点阵图，
-   等于那部分用户看不到任何动效。改成纯 CSS 动效，不依赖 WebGPU。
-   只动 transform 与 opacity，符合动效规范（GPU 合成，不触发布局重绘）。 */
+/* 降级层：WebGPU 不可用时显示。
+   原来只有一张很淡的静止点阵，既不动也看不出品牌，等于那部分用户什么也没看到。
+   现在两层纯 CSS 实现，不需要 WebGPU：
+     ::before  会漂移的点阵网格（亮一些，保证看得见）
+     ::after   「知微」轮廓。用 text-stroke 只描边不填色，
+               与 WebGPU 版「字形处让空」的语义一致。 */
 .waves-fallback{position:absolute;inset:0;z-index:0;opacity:0;
-  transition:opacity .6s ease;overflow:hidden;
-  -webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 12%,transparent 74%);
-          mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 12%,transparent 74%)}
+  transition:opacity .6s ease;overflow:hidden}
 .waves-fallback::before{
   content:'';position:absolute;inset:-28px;
   background-image:radial-gradient(
-    color-mix(in srgb,var(--color-halo-violet) 46%,transparent) 1.1px,transparent 1.2px);
+    color-mix(in srgb,var(--color-halo-violet) 96%,transparent) 1.3px,transparent 1.5px);
   background-size:14px 14px;
   /* 位移正好一个点距，循环无接缝 */
   animation:fallbackDrift 26s linear infinite,
             fallbackBreathe 7s ease-in-out infinite;
 }
+.waves-fallback::after{
+  content:'知微';
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-51%);
+  font-family:var(--font-open-sauce-sans);
+  font-weight:var(--font-weight-bold);
+  font-size:min(50vw,64vh);
+  letter-spacing:.02em;line-height:1;white-space:nowrap;
+  color:transparent;
+  -webkit-text-stroke:1.4px color-mix(in srgb,var(--color-signal-blue) 58%,transparent);
+  pointer-events:none;
+}
 @keyframes fallbackDrift{
   from{transform:translate3d(0,0,0)}
   to{transform:translate3d(14px,14px,0)}
 }
-@keyframes fallbackBreathe{0%,to{opacity:.62}50%{opacity:1}}
+@keyframes fallbackBreathe{0%,to{opacity:.66}50%{opacity:1}}
 .waves-fallback.is-on{opacity:1}
 /* 文字直接压在点阵上会读不清。用一层径向遮罩：
    中心压暗保证正文可读，四周留出点阵与「知微」字形。 */
