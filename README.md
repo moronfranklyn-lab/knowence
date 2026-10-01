@@ -261,6 +261,7 @@ New-NetFirewallRule -DisplayName "Ollama 11434" -Direction Inbound `
 | [docs/阶段文档/Knowence技术方案.md](docs/阶段文档/Knowence技术方案.md) | 架构拆解与改造设计 |
 | [docs/阶段文档/技术适配声明.md](docs/阶段文档/技术适配声明.md) | 选型结论与偏离说明 |
 | [docs/evidence/评测报告.md](docs/evidence/评测报告.md) | **RAG 效果评测：自建评测集、三组对照实验、阈值缺陷定位** |
+| [docs/evidence/bad-cases.md](docs/evidence/bad-cases.md) | **Bad Case 分析与方法论：4 个真实失败案例 + 归因顺序 + 评测盲区** |
 | [docs/BASE_LOCK.md](docs/BASE_LOCK.md) | 上游基线锁定 |
 | [deploy/README-Windows推理节点.md](deploy/README-Windows推理节点.md) | Windows 推理节点部署（含国内快源） |
 
