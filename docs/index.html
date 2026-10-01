@@ -259,8 +259,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 
 /* 浮动卡片 · 令牌的 radius-lg = 8px */
 
-@media (max-width:1180px){.fc--1,.fc--3{left:8px}.fc--2,.fc--4{right:8px}.fc{width:200px}}
-@media (max-width:1000px){.fc{display:none}}
+@media (max-width:1180px){}
+@media (max-width:1000px){}
 
 /* ---------------------------------------------------------------- 通用区块 */
 .sec{padding-top:var(--sect)}
@@ -360,11 +360,9 @@ pre .k{color:var(--color-arc-cyan)}
    「One signature motion per view. Pick one focal motion and keep the rest quiet.」
    本页唯一的主运动是背景波纹，所以入场只在首屏播一次，其余区块不参与。 */
 @keyframes loadFadeUp{0%{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes loadFade{0%{opacity:0}to{opacity:1}}
+to{opacity:1}}
 @keyframes slowPulse{0%,to{opacity:1}50%{opacity:.3}}
 
-.load-in{animation:var(--motion-in) var(--motion-ease-out) forwards loadFadeUp;opacity:0}
-.load-fade{animation:var(--motion-fade) forwards loadFade;opacity:0}
 
 /* 按钮八态：规范要求交互元素至少覆盖 default/hover/focus/active/disabled。
    悬停用微抬升（translateY(-2px)），按下用 scale(.97)，均为规范给定值。 */
@@ -386,7 +384,6 @@ pre .k{color:var(--color-arc-cyan)}
 }
 /* 规范：reduced motion 下改为仅淡入，且不超过 duration.fast，不做位移 */
 @media (prefers-reduced-motion:reduce){
-  .load-in,.load-fade,.hero__in>*{animation:loadFade .15s ease forwards!important;transform:none!important}
   .btn{transition:none}
   .btn:hover,.btn:active{transform:none}
   .waves-fallback{transition:none}
