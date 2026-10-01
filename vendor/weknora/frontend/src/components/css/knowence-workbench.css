@@ -91,61 +91,7 @@
   z-index: 1;
 }
 
-/* ---------- 登录页波纹层（hero 深靛底是唯一能让 screen 混合发光的场） ---------- */
-.knw-hero-waves {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.knw-hero-waves .knowence-waves__canvas {
-  mix-blend-mode: screen; /* 深靛画布底色与渐变场相加：黑=隐形，亮点发光 */
-}
-
-.knw-waves-diag {
-  position: absolute;
-  bottom: var(--app-space-4);
-  left: var(--app-space-4);
-  z-index: 2;
-  font-size: var(--app-text-sm);
-  color: var(--td-text-color-placeholder);
-  background: var(--td-bg-color-container-hover);
-  padding: var(--app-space-1) var(--app-space-3);
-  border-radius: var(--app-radius-pill);
-}
-
-/* 波纹上位后，旧知识图谱节点退场（Chanel 法则：出门前摘掉一件首饰） */
-.animated-bg .knowledge-node,
-.animated-bg .knowledge-lines {
-  display: none;
-}
-
-/* 提示条去薄荷绿底，换品牌浅蓝 */
-.login-layout .form-card .form-hint {
-  background: var(--td-brand-color-1);
-  color: var(--td-brand-color-8);
-}
-
-/* 内容层浮于波纹之上 */
-.login-layout .showcase-section,
-.login-layout .form-section,
-.login-layout .header-logo,
-.login-layout .header-links {
-  position: relative;
-  z-index: 1;
-}
-
-@media (max-width: 768px) {
-  .knw-hero-waves {
-    display: none;
-  }
-
-  .animated-bg .knowledge-node,
-  .animated-bg .knowledge-lines {
-    opacity: 0.35;
-  }
-}
+/* ---------- 登录页波纹层已内聚到 Login.vue（scoped），此处只保留工作台层 ---------- */
 
 /* ---------- 新对话页（creatChat）工作台层 ---------- */
 .knw-chat-sub {

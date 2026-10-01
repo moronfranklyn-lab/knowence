@@ -317,12 +317,13 @@ struct Composite { strength: vec4f }
 }
 `;
 
-const parseColor = (value: string, fallback: string): number[] => {
+const parseColor = (value: string, fallback: string): readonly [number, number, number] => {
   const source = typeof value === 'string' ? value.trim() : '';
   const match = /^#?([\da-f]{3}|[\da-f]{6})$/i.exec(source) || /^#?([\da-f]{6})$/i.exec(fallback);
   let hex = (match && match[1]) || '000000';
   if (hex.length === 3) hex = hex.replace(/./g, (c) => c + c);
-  return [0, 2, 4].map((offset) => parseInt(hex.slice(offset, offset + 2), 16) / 255);
+  const channel = (offset: number) => parseInt(hex.slice(offset, offset + 2), 16) / 255;
+  return [channel(0), channel(2), channel(4)];
 };
 
 let cleanup: (() => void) | null = null;
@@ -390,14 +391,14 @@ onMounted(() => {
   let frameId = 0;
   let lastFrameTime = 0;
   let time = 0;
-  let drift: number[] = [0, 0];
+  let drift: readonly [number, number] = [0, 0];
   let dpr = 1;
   let visible = true;
   let presented = false;
   let cols = 1;
   let rows = 1;
   let cellPx = 10;
-  let gridOrigin: number[] = [0, 0];
+  let gridOrigin: readonly [number, number] = [0, 0];
   let charges = new Float32Array(1);
   let heights = new Float32Array(1);
   let previousHeights = new Float32Array(1);
@@ -474,7 +475,7 @@ onMounted(() => {
     emit('error', new Error(`[${stage}] ` + (error instanceof Error ? error.message : String(error))));
   };
 
-  const measureSurface = () => {
+  const measureSurface = (): readonly [number, number] => {
     dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     return [Math.max(1, Math.round(canvas.clientWidth * dpr)), Math.max(1, Math.round(canvas.clientHeight * dpr))];
   };
@@ -523,7 +524,7 @@ onMounted(() => {
         set: { params, maskTexture, maskSampler: linearSampler, charges: chargeBuffer },
       });
       const sceneTarget = target(gpu, { size: initialSize, format: 'rgba8unorm', label: 'shape-waves-scene' });
-      const glowSize = (size: number[]) => [Math.max(1, Math.ceil(size[0] / 2)), Math.max(1, Math.ceil(size[1] / 2))];
+      const glowSize = (size: readonly [number, number]): readonly [number, number] => [Math.max(1, Math.ceil(size[0] / 2)), Math.max(1, Math.ceil(size[1] / 2))];
       const glowA = target(gpu, { size: glowSize(initialSize), format: 'rgba8unorm', label: 'shape-waves-glow-a' });
       const glowB = target(gpu, { size: glowSize(initialSize), format: 'rgba8unorm', label: 'shape-waves-glow-b' });
       const blurParamsX = uniforms(gpu, { direction: [0, 0, 4, 1] });
