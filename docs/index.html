@@ -114,11 +114,21 @@
        fug-chip-jelly 1.5s cubic-bezier(.45,0,.55,1)
        slowPulse    2.4s  ease-in-out infinite
      入场错峰取自其 HTML 内联的 animation-delay：0 / .05 / .08 / .16 / .24s */
+  /* 来自 ux-ui-agent-skills 的 tokens/motion.json 原值 */
+  --motion-fast:100ms;
+  --motion-base:200ms;
+  --motion-moderate:300ms;
+  --motion-slow:500ms;
+  --motion-ease-in:cubic-bezier(.4,0,1,1);
+  --motion-ease-inout:cubic-bezier(.4,0,.2,1);
+  --motion-spring:cubic-bezier(.34,1.56,.64,1);
+
   --motion-in:.5s;
   --motion-fade:.45s;
   --motion-quick:.4s;
   --motion-seq:.7s;
-  --motion-ease-out:cubic-bezier(.22,1,.36,1);
+  --motion-ease-out:cubic-bezier(0,0,.2,1);        /* 令牌值，用于区块入场 */
+  --motion-ease-ameba:cubic-bezier(.22,1,.36,1);   /* Ameba 实测值，用于首屏入场 */
   --motion-ease-back:cubic-bezier(.34,1.56,.64,1);
   --motion-ease-soft:cubic-bezier(.45,0,.55,1);
   --motion-pulse:2.4s;
@@ -348,6 +358,30 @@ pre .k{color:var(--color-arc-cyan)}
 .foot a{color:var(--color-halo-violet)}
 .foot a:hover{color:var(--color-arc-cyan)}
 
+/* ---------------------------------------------------------------- 滚动入场
+   规范 Motion Choreography → Entrance reveals：
+     Translate <= 8-16px + fade；duration.moderate；ease-out
+     Stagger 40-80ms 一档，总延迟控制在 400ms 内
+     reduced motion：只保留透明度淡入（<= duration.fast），不做位移
+   只给「区块标题组」和「列表项」用，不给每个元素都加（规范：什么都动 = 什么都不重要）。 */
+@keyframes revealUp{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
+}
+.reveal,.reveal-list>*{opacity:0}
+.reveal.is-in{animation:revealUp var(--motion-moderate) var(--motion-ease-out) forwards}
+.reveal.is-in.d1{animation-delay:50ms}
+.reveal.is-in.d2{animation-delay:100ms}
+.reveal-list.is-in>*{animation:revealUp var(--motion-moderate) var(--motion-ease-out) forwards}
+.reveal-list.is-in>*:nth-child(1){animation-delay:0ms}
+.reveal-list.is-in>*:nth-child(2){animation-delay:50ms}
+.reveal-list.is-in>*:nth-child(3){animation-delay:100ms}
+.reveal-list.is-in>*:nth-child(n+4){animation-delay:120ms}
+/* 关掉 JS 时不能把内容藏住 */
+@media (prefers-reduced-motion:reduce){
+  .reveal,.reveal-list>*{opacity:1;animation:none!important;transform:none!important}
+}
+
 /* ---------------------------------------------------------------- Bento 优点区
    刻意不做等大卡片：规范明确「Four equal cards means the eye lands nowhere」。
    一块主、两块辅，尺寸与视觉重量都不同，形成唯一落眼点。 */
@@ -497,7 +531,7 @@ to{opacity:1}}
 .btn--ghost:hover{transform:translateY(-2px)}
 
 @media (prefers-reduced-motion:no-preference){
-  .hero__in>*{opacity:0;animation:var(--motion-in) var(--motion-ease-out) forwards loadFadeUp}
+  .hero__in>*{opacity:0;animation:var(--motion-in) var(--motion-ease-ameba) forwards loadFadeUp}
   .hero__in>*:nth-child(1){animation-delay:0s}
   .hero__in>*:nth-child(2){animation-delay:.06s}
   .hero__in>*:nth-child(3){animation-delay:.12s}
@@ -517,6 +551,10 @@ to{opacity:1}}
   .hero{min-height:auto;padding:130px var(--pad) var(--spacing-80)}
 }
 </style>
+<noscript><style>
+  /* 关掉 JS 时不能把内容藏住 */
+  .reveal,.reveal-list>*{opacity:1!important;animation:none!important;transform:none!important}
+</style></noscript>
 </head>
 <body>
 
@@ -566,7 +604,7 @@ to{opacity:1}}
 
   <!-- ============================================================ 三个优点，不等大 -->
   <section class="wrap sec" id="why">
-    <div class="bento">
+    <div class="bento reveal-list">
       <article class="bento__lead">
         <h2>数据不出内网</h2>
         <p>
@@ -590,7 +628,7 @@ to{opacity:1}}
 
   <!-- ============================================================ 证据 -->
   <section class="wrap sec" id="proof">
-    <figure class="shot fig0">
+    <figure class="shot fig0 reveal">
       <img src="images/chat-with-citations.png" width="2880" height="1400"
            alt="知微工作台：提问后给出带原文出处的回答，右下角模型选择器显示本地 Qwen2.5-7B" fetchpriority="high">
     </figure>
@@ -600,7 +638,7 @@ to{opacity:1}}
         上面是工作台的真实截图，右下角的模型选择器接什么由你决定。
         下面三项衡量的是平台本身。
       </p>
-      <dl class="proof__list">
+      <dl class="proof__list reveal-list">
         <div><dt>1.0000</dt><dd>检索指标六项全满：Precision、Recall、NDCG@3、NDCG@10、MRR、MAP。这一项衡量的是编排层，与你用哪个模型无关</dd></div>
         <div><dt>62 类</dt><dd>写入审计日志的事件类型。谁问了什么、看了哪些分块，都可追</dd></div>
         <div><dt>4 级</dt><dd>角色权限模型，配合业务域知识库隔离</dd></div>
@@ -618,13 +656,13 @@ to{opacity:1}}
   <!-- ============================================================ 能力
        版式：双列紧凑索引（与上方 bento、下方编号列表都不同构） -->
   <section class="wrap sec" id="what">
-    <h2 class="sec__h">它做什么</h2>
-    <p class="sec__lead">
+    <h2 class="sec__h reveal">它做什么</h2>
+    <p class="sec__lead reveal d1">
       底座是 <a href="https://github.com/Tencent/WeKnora">Tencent/WeKnora</a>（MIT）。
       哪些能力来自上游、哪些是本项目完成的，<a href="与上游的差异.md">这份对照</a>写得很清楚。
     </p>
 
-    <ul class="index">
+    <ul class="index reveal-list">
       <li><b>统一知识库</b><span>Word、PDF、Excel、Markdown 入库。分块可编辑、可比对、可回滚。</span></li>
       <li><b>有据可查的回答</b><span>向量与关键词两路并发召回，重排后回填引用。知识库没覆盖的，它说查不到。</span></li>
       <li><b>Agent 执行</b><span>ReAct 循环加工具调用。删除、改配置这类动作挂起等你确认，不可逆的默认拒绝。</span></li>
@@ -637,8 +675,8 @@ to{opacity:1}}
   <!-- ============================================================ 框架
        版式：分层带图。宣传重点是中间的 Harness 层，模型层降为最下方的可插拔槽位。 -->
   <section class="wrap sec" id="arch">
-    <h2 class="sec__h">知微是一个 Harness</h2>
-    <p class="sec__lead">
+    <h2 class="sec__h reveal">知微是一个 Harness</h2>
+    <p class="sec__lead reveal d1">
       模型本身不是这个产品。你用自己的模型，知微提供它们外面那层编排、检索、权限与审计。
       换成别家的模型，这一层不用重写。
     </p>
@@ -658,7 +696,7 @@ to{opacity:1}}
           <b>知微 Harness</b>
           <span>平台自己实现的编排与治理层，也是这个项目的全部内容</span>
         </div>
-        <ul class="arch__grid">
+        <ul class="arch__grid reveal-list">
           <li><b>检索编排</b><span>向量与关键词双路召回，重排之后把原文出处回填到结论上</span></li>
           <li><b>Agent 循环</b><span>ReAct 推理加工具调用。危险操作挂起等确认，不可逆的默认拒绝</span></li>
           <li><b>模型路由</b><span>对话、向量、重排三类独立配置，统一接口，可热插拔</span></li>
@@ -684,12 +722,12 @@ to{opacity:1}}
   <!-- ============================================================ 踩坑
        版式：编号列表。这块是与其他同类项目差异最大的地方，保留全部 11 条。 -->
   <section class="wrap sec" id="lessons">
-    <h2 class="sec__h">部署时踩过的 11 个坑</h2>
-    <p class="sec__lead">
+    <h2 class="sec__h reveal">部署时踩过的 11 个坑</h2>
+    <p class="sec__lead reveal d1">
       这些不是注意事项，是真出过故障、翻了日志、定位到根因的问题。每条都记了当时是怎么找到的。
     </p>
 
-    <ol class="pits">
+    <ol class="pits reveal-list">
       <li><div>官方镜像的 SQLite 没编译 FTS5，混合检索的关键词那一路直接失败
         <em>换用 ParadeDB 之后才有真正的向量与关键词双路召回</em></div></li>
       <li><div>平台的 SSRF 防护会拦住内网模型地址
@@ -717,13 +755,13 @@ to{opacity:1}}
 
   <!-- ============================================================ 下载 -->
   <section class="wrap sec" id="start">
-    <h2 class="sec__h">三步跑起来</h2>
-    <p class="sec__lead">需要 Docker。本地模型走国内镜像源下载，约 2.2GB。</p>
+    <h2 class="sec__h reveal">三步跑起来</h2>
+    <p class="sec__lead reveal d1">需要 Docker。本地模型走国内镜像源下载，约 2.2GB。</p>
 
 <pre class="steps__clone"><span class="k">git clone</span> https://github.com/moronfranklyn-lab/knowence.git
 <span class="k">cd</span> knowence</pre>
 
-    <ol class="steps">
+    <ol class="steps reveal-list">
       <li>
         <div>
           <b>取代码，填三个密钥</b>
@@ -846,6 +884,30 @@ to{opacity:1}}
   } else {
     start();
   }
+})();
+
+/* ---------------------------------------------------------------------------
+   滚动入场触发
+   规范 Entrance reveals：进入视口才播，只播一次。
+   总延迟上限 120ms + 300ms 时长，控制在 400ms 左右。
+   reduced motion 或浏览器不支持 IntersectionObserver 时直接置为终态。
+   --------------------------------------------------------------------------- */
+(function () {
+  var nodes = document.querySelectorAll('.reveal, .reveal-list');
+  if (!nodes.length) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (reduce.matches || !('IntersectionObserver' in window)) {
+    nodes.forEach(function (el) { el.classList.add('is-in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      io.unobserve(e.target);           // 只播一次
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  nodes.forEach(function (el) { io.observe(el); });
 })();
 
 </script>
