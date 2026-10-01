@@ -96,6 +96,28 @@
   --surface-frosted-panel:#00052e;     /* 同上 */
   --surface-product-paper:#ffffff;
 
+  /* ---- 动效令牌 ----
+     这一组不在你给的 @theme 里（那份只有色彩/字体/间距/圆角，没有 motion）。
+     以下数值是从 ameba.ai 的线上 CSS 实测提取的，不是自编：
+       load-in      .5s   cubic-bezier(.22,1,.36,1)   forwards   ← 页面入场
+       load-fade    .45s  forwards
+       cng-node-in  .5s   cubic-bezier(.22,1,.36,1)   forwards
+       cng-check-in .4s   cubic-bezier(.34,1.56,.64,1) forwards  ← 过冲回弹
+       cng-edge-draw .55s ease-out                    forwards
+       fug-email-in .5s   ease-out  .3s 延迟          forwards
+       osg-row-learn .7s  ease-out
+       fug-chip-jelly 1.5s cubic-bezier(.45,0,.55,1)
+       slowPulse    2.4s  ease-in-out infinite
+     入场错峰取自其 HTML 内联的 animation-delay：0 / .05 / .08 / .16 / .24s */
+  --motion-in:.5s;
+  --motion-fade:.45s;
+  --motion-quick:.4s;
+  --motion-seq:.7s;
+  --motion-ease-out:cubic-bezier(.22,1,.36,1);
+  --motion-ease-back:cubic-bezier(.34,1.56,.64,1);
+  --motion-ease-soft:cubic-bezier(.45,0,.55,1);
+  --motion-pulse:2.4s;
+
   /* ---- 非令牌色：Ameba 令牌里没有对应项，是本页有意新增的 ----
      列在这里是为了表明「它们不是漏改」，改动时不必去找令牌。 */
   --ext-warn:#ff8a3d;        /* 警示橙：Ameba 无 warning 色，用于「权限被拒」卡 */
@@ -369,12 +391,46 @@ pre .k{color:var(--color-arc-cyan)}
 .flow__l--dim{background:linear-gradient(transparent,var(--line))}
 
 /* ---------------------------------------------------------------- 入场：只做一次 */
+/* 入场：曲线与时长取自 ameba.ai 的 load-in，错峰延迟取自其 HTML 内联值 */
+@keyframes loadFadeUp{0%{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes loadFade{0%{opacity:0}to{opacity:1}}
+/* 浮动卡：四个 keyframes 与振幅原样取自 ameba.ai（-14 / -10 / -18 / -12px） */
+@keyframes heroFloat1{0%,to{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes heroFloat2{0%,to{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes heroFloat3{0%,to{transform:translateY(0)}50%{transform:translateY(-18px)}}
+@keyframes heroFloat4{0%,to{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes slowPulse{0%,to{opacity:1}50%{opacity:.3}}
+
+.load-in{animation:var(--motion-in) var(--motion-ease-out) forwards loadFadeUp;opacity:0}
+.load-fade{animation:var(--motion-fade) forwards loadFade;opacity:0}
+/* 滚动进入视口后才播放（对应 ameba.ai 的 .xxx-play 类） */
+.reveal{opacity:0}
+.reveal.is-play{animation:var(--motion-in) var(--motion-ease-out) forwards loadFadeUp}
+.reveal.is-play.d1{animation-delay:.05s}
+.reveal.is-play.d2{animation-delay:.1s}
+.reveal.is-play.d3{animation-delay:.16s}
+.reveal.is-play.d4{animation-delay:.24s}
+
 @media (prefers-reduced-motion:no-preference){
-  .hero__in>*{opacity:0;transform:translateY(18px);animation:rise .85s cubic-bezier(.2,.7,.3,1) forwards}
-  .hero__in>*:nth-child(2){animation-delay:.1s}
-  .hero__in>*:nth-child(3){animation-delay:.19s}
-  .hero__in>*:nth-child(4){animation-delay:.27s}
-  @keyframes rise{to{opacity:1;transform:none}}
+  .hero__in>*{opacity:0;animation:var(--motion-in) var(--motion-ease-out) forwards loadFadeUp}
+  .hero__in>*:nth-child(1){animation-delay:0s}
+  .hero__in>*:nth-child(2){animation-delay:.05s}
+  .hero__in>*:nth-child(3){animation-delay:.08s}
+  .hero__in>*:nth-child(4){animation-delay:.16s}
+  .fc{animation:5s ease-in-out infinite}
+  .fc--1{animation-name:heroFloat1}   /* 振幅 -14px */
+  .fc--2{animation-name:heroFloat2}   /* 振幅 -10px，与其它错开相位 */
+  .fc--3{animation-name:heroFloat3}   /* 振幅 -18px */
+  .fc--4{animation-name:heroFloat4}   /* 振幅 -12px */
+  .fc--2{animation-duration:6s;animation-delay:-1.2s}
+  .fc--3{animation-duration:5.6s;animation-delay:-2.4s}
+  .fc--4{animation-duration:6.4s;animation-delay:-.7s}
+  .stat__src{transition:color .15s ease,border-color .15s ease}
+}
+/* 无障碍：与 ameba.ai 一样，减少动效时一律关掉并置为终态 */
+@media (prefers-reduced-motion:reduce){
+  .load-in,.load-fade,.reveal,.hero__in>*,.fc{animation:none!important;opacity:1!important;transform:none!important}
+  .reveal{opacity:1}
 }
 @media (max-width:960px){
   .stats{grid-template-columns:repeat(2,1fr)}
@@ -475,9 +531,9 @@ pre .k{color:var(--color-arc-cyan)}
 
   <!-- ============================================================ 产品截图 -->
   <section class="wrap sec" id="product">
-    <div class="sec__tag tag">实际界面</div>
-    <h2 class="sec__h">答案里每条事实，都挂得回原文</h2>
-    <p class="sec__lead">
+    <div class="sec__tag tag reveal">实际界面</div>
+    <h2 class="sec__h reveal d1">答案里每条事实，都挂得回原文</h2>
+    <p class="sec__lead reveal d2">
       这是工作台的真实截图（为节省篇幅，裁掉了两段内容之间的空白区域）。右下角模型选择器显示的是本地部署的 Qwen2.5-7B——
       检索、重排、向量化、生成，四个环节没有一个调用外部服务。
     </p>
@@ -492,9 +548,9 @@ pre .k{color:var(--color-arc-cyan)}
 
   <!-- ============================================================ 实测 -->
   <section class="wrap sec" id="evidence">
-    <div class="sec__tag tag">实测数据</div>
-    <h2 class="sec__h">每个数字都能查到出处</h2>
-    <p class="sec__lead">
+    <div class="sec__tag tag reveal">实测数据</div>
+    <h2 class="sec__h reveal d1">每个数字都能查到出处</h2>
+    <p class="sec__lead reveal d2">
       下面四项都产自同一台机器上的完整链路，包含当时的日志、测量方法和失败记录。
       点「出处」可以直接看到原始文档。
     </p>
@@ -533,9 +589,9 @@ pre .k{color:var(--color-arc-cyan)}
 
   <!-- ============================================================ 能力 -->
   <section class="wrap sec">
-    <div class="sec__tag tag">它能做什么</div>
-    <h2 class="sec__h">五件事，一件都不含糊</h2>
-    <p class="sec__lead">
+    <div class="sec__tag tag reveal">它能做什么</div>
+    <h2 class="sec__h reveal d1">五件事，一件都不含糊</h2>
+    <p class="sec__lead reveal d2">
       底座是 <a href="https://github.com/Tencent/WeKnora">Tencent/WeKnora</a>（MIT），
       本项目在其上完成了本地化部署、双节点拆分与品牌改造。
       哪些是我们做的、哪些是上游的，<a href="与上游的差异.md">这份文档</a>写得很清楚。
@@ -552,9 +608,9 @@ pre .k{color:var(--color-arc-cyan)}
 
   <!-- ============================================================ 部署形态 -->
   <section class="wrap sec" id="deploy">
-    <div class="sec__tag tag">部署形态</div>
-    <h2 class="sec__h">推理吃显卡，平台吃磁盘，拆开各自扩容</h2>
-    <p class="sec__lead">
+    <div class="sec__tag tag reveal">部署形态</div>
+    <h2 class="sec__h reveal d1">推理吃显卡，平台吃磁盘，拆开各自扩容</h2>
+    <p class="sec__lead reveal d2">
       两者职责不同，合在一台机器上会互相抢资源。拆开之后，推理节点可以随时加一台，
       而它本身不存储任何业务数据。
     </p>
@@ -591,9 +647,9 @@ pre .k{color:var(--color-arc-cyan)}
 
   <!-- ============================================================ 坑 -->
   <section class="wrap sec" id="pits">
-    <div class="sec__tag tag">部署实录</div>
-    <h2 class="sec__h">踩过的 11 个坑，一个都没瞒着</h2>
-    <p class="sec__lead">
+    <div class="sec__tag tag reveal">部署实录</div>
+    <h2 class="sec__h reveal d1">踩过的 11 个坑，一个都没瞒着</h2>
+    <p class="sec__lead reveal d2">
       这些不是「注意事项」，是真出过故障、翻了日志、定位到根因的问题。
       每条都记了当时是怎么找到的——排查思路比结论有用。
     </p>
@@ -626,9 +682,9 @@ pre .k{color:var(--color-arc-cyan)}
 
   <!-- ============================================================ 下载 -->
   <section class="wrap sec" id="start">
-    <div class="sec__tag tag">开始使用</div>
-    <h2 class="sec__h">三步跑起来</h2>
-    <p class="sec__lead">
+    <div class="sec__tag tag reveal">开始使用</div>
+    <h2 class="sec__h reveal d1">三步跑起来</h2>
+    <p class="sec__lead reveal d2">
       需要 Docker。本地模型走国内镜像源下载，约 2.2GB，脚本会直接放进 Docker 原生卷——
       放到宿主机目录再挂进去会慢 9.4 倍（见坑 7）。
     </p>
@@ -784,6 +840,28 @@ pre .k{color:var(--color-arc-cyan)}
   } else {
     start();
   }
+})();
+
+/* ---------------------------------------------------------------------------
+   滚动进入视口后播放（对应 ameba.ai 的 .xxx-play 机制：动效不是页面加载就跑，
+   而是元素进入视口才触发）。
+   --------------------------------------------------------------------------- */
+(function () {
+  var items = document.querySelectorAll('.reveal');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!items.length) return;
+  if (reduce.matches || !('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('is-play'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-play');
+      io.unobserve(e.target);          // 只播一次，与 ameba.ai 一致
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+  items.forEach(function (el) { io.observe(el); });
 })();
 </script>
 </body>
