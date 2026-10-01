@@ -70,6 +70,39 @@
   --radius-md:4px;
   --radius-lg:8px;
 
+  /* ---- Typography · Weights（令牌原值）---- */
+  --font-weight-light:300;  --font-weight-regular:400;  --font-weight-bold:700;
+
+  /* ---- Layout（令牌原值）---- */
+  --page-max-width:1200px;
+  --section-gap:80px;
+  --card-padding:20px;
+  --element-gap:10px;
+
+  /* ---- Border Radius · 命名圆角（令牌原值）----
+     注意：按钮是 8px 不是 4px —— 上一轮我按 radius-md 做了按钮，是错的。 */
+  --radius-tags:4px;
+  --radius-cards:8px;
+  --radius-images:4px;
+  --radius-buttons:8px;
+
+  /* ---- Surfaces ----
+     ⚠️ 令牌源里 --surface-midnight-canvas 与 --surface-frosted-panel 写的是 #00052，
+        只有 5 位十六进制，不是合法色值。自定义属性声明时不校验，所以不会报错，
+        但一旦 background:var(--surface-midnight-canvas) 就会「整条声明被丢弃」静默失效。
+        几乎确定是漏了个 e。此处按 #00052e（与 --color-midnight-ink 一致）使用。 */
+  --surface-midnight-canvas:#00052e;   /* 源令牌写作 #00052，已按 #00052e 修正 */
+  --surface-violet-wash:#06105a;
+  --surface-frosted-panel:#00052e;     /* 同上 */
+  --surface-product-paper:#ffffff;
+
+  /* ---- 非令牌色：Ameba 令牌里没有对应项，是本页有意新增的 ----
+     列在这里是为了表明「它们不是漏改」，改动时不必去找令牌。 */
+  --ext-warn:#ff8a3d;        /* 警示橙：Ameba 无 warning 色，用于「权限被拒」卡 */
+  --ext-pit-number:#e0a020;  /* 踩坑编号：暖色，全页仅此一处用暖色 */
+  --ext-code-bg:#00031c;     /* 代码块底 */
+  --ext-code-fg:#c9d4ff;     /* 代码块文字 */
+
   /* ---- 派生：深色页面需要的分隔线（令牌未给，按 midnight-ink 提亮得出）---- */
   --line:      #1b2364;
   --line-soft: #131a4d;
@@ -81,7 +114,7 @@
   --text-subheading-r:  clamp(19px, 2.0vw, var(--text-subheading));
 
   --pad: clamp(var(--spacing-20), 4.5vw, var(--spacing-80));
-  --sect: clamp(var(--spacing-80), 10vw, var(--spacing-120));
+  --sect: var(--section-gap);   /* 令牌原值；小屏再放大留白 */
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -89,7 +122,7 @@ html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
   margin:0;background:var(--color-midnight-ink);color:var(--color-paper);
-  font:400 var(--text-body)/var(--leading-body) var(--font-open-sauce-sans);
+  font:var(--font-weight-regular) var(--text-body)/var(--leading-body) var(--font-open-sauce-sans);
   font-variant-numeric:tabular-nums;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
@@ -97,7 +130,7 @@ img{max-width:100%;height:auto;display:block}
 code,pre{font-family:var(--font-ibm-plex-mono)}
 a{color:var(--color-arc-cyan);text-decoration:none}
 a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);outline-offset:3px}
-.wrap{max-width:1220px;margin:0 auto;padding:0 var(--pad)}
+.wrap{max-width:var(--page-max-width);margin:0 auto;padding:0 var(--pad)}
 
 /* 小标签 · 令牌的 micro 级：11px / 行高 1.82 / 字距 1px */
 .tag{
@@ -111,20 +144,20 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
   font-family:var(--font-open-sauce-sans);
   font-size:var(--text-body-sm);line-height:1;font-weight:500;
   padding:var(--spacing-15) var(--spacing-26);border:0;cursor:pointer;
-  border-radius:var(--radius-md);
+  border-radius:var(--radius-buttons);
   background:var(--color-signal-blue);color:var(--color-paper);
   transition:background .18s ease;
 }
-.btn:hover{background:#2d4ee0}
+.btn:hover{background:color-mix(in srgb,var(--color-signal-blue) 82%,var(--color-paper))}
 .btn--ghost{background:transparent;border:1px solid var(--line);color:var(--color-halo-violet)}
-.btn--ghost:hover{background:rgba(4,40,203,.16);border-color:var(--color-signal-blue);color:var(--color-paper)}
+.btn--ghost:hover{background:color-mix(in srgb,var(--color-signal-blue) 16%,transparent);border-color:var(--color-signal-blue);color:var(--color-paper)}
 .btn--sm{padding:var(--spacing-10) var(--spacing-16);font-size:var(--text-caption)}
 
 /* ---------------------------------------------------------------- 顶栏 */
 .top{position:fixed;inset:0 0 auto;z-index:30;transition:background .25s ease,border-color .25s ease;
   border-bottom:1px solid transparent}
-.top.is-stuck{background:rgba(0,5,46,.86);backdrop-filter:blur(14px);border-bottom-color:var(--line-soft)}
-.top__in{max-width:1220px;margin:0 auto;padding:var(--spacing-16) var(--pad);
+.top.is-stuck{background:color-mix(in srgb,var(--color-midnight-ink) 86%,transparent);backdrop-filter:blur(14px);border-bottom-color:var(--line-soft)}
+.top__in{max-width:var(--page-max-width);margin:0 auto;padding:var(--spacing-16) var(--pad);
   display:flex;align-items:center;gap:var(--spacing-30)}
 .brand{display:flex;align-items:center;gap:var(--spacing-10);font-weight:600;
   font-size:var(--text-body);letter-spacing:var(--tracking-subheading);color:var(--color-paper)}
@@ -144,7 +177,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
    少了这一层，深色画布会把背景整片盖住。 */
 .waves canvas{mix-blend-mode:screen}
 .waves-fallback{position:absolute;inset:0;z-index:0;opacity:0;transition:opacity .6s ease;
-  background-image:radial-gradient(rgba(79,107,216,.42) 1.1px,transparent 1.2px);
+  background-image:radial-gradient(
+    color-mix(in srgb,var(--color-halo-violet) 46%,transparent) 1.1px,transparent 1.2px);
   background-size:14px 14px;
   -webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 12%,transparent 74%);
           mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 12%,transparent 74%)}
@@ -153,12 +187,18 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
    中心压暗保证正文可读，四周留出点阵与「知微」字形。 */
 .hero__scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
-    linear-gradient(to bottom, transparent 58%, rgba(0,5,46,.62) 76%, rgba(0,5,46,.9) 92%, rgba(0,5,46,.96) 100%),
+    linear-gradient(to bottom, transparent 58%,
+      color-mix(in srgb,var(--color-midnight-ink) 62%,transparent) 76%,
+      color-mix(in srgb,var(--color-midnight-ink) 90%,transparent) 92%,
+      color-mix(in srgb,var(--color-midnight-ink) 96%,transparent) 100%),
     radial-gradient(ellipse 44% 52% at 50% 47%,
-      rgba(0,5,46,.95) 0%, rgba(0,5,46,.88) 38%, rgba(0,5,46,.44) 66%, transparent 86%)}
+      color-mix(in srgb,var(--color-midnight-ink) 95%,transparent) 0%,
+      color-mix(in srgb,var(--color-midnight-ink) 88%,transparent) 38%,
+      color-mix(in srgb,var(--color-midnight-ink) 44%,transparent) 66%,
+      transparent 86%)}
 .hero__in{position:relative;z-index:2;text-align:center;max-width:min(1040px,94vw);margin:0 auto}
 .hero__h1{
-  margin:0 auto;max-width:20em;font-weight:600;
+  margin:0 auto;max-width:20em;font-weight:var(--font-weight-bold);
   font-size:var(--text-display-r);
   line-height:var(--leading-display);
   letter-spacing:var(--tracking-display);
@@ -175,14 +215,15 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 /* 浮动卡片 · 令牌的 radius-lg = 8px */
 .fc{
   position:absolute;z-index:3;width:224px;padding:var(--spacing-15) var(--spacing-16);
-  background:rgba(6,16,90,.9);border:1px solid var(--line);border-radius:var(--radius-lg);
+  background:color-mix(in srgb,var(--surface-violet-wash) 90%,transparent);
+  border:1px solid var(--line);border-radius:var(--radius-cards);
   backdrop-filter:blur(8px);
 }
 .fc__t{font-size:var(--text-caption);line-height:1.45;font-weight:500;color:var(--color-paper)}
 .fc__tag{margin-top:var(--spacing-10)}
 .fc--ok .fc__i{color:var(--color-arc-cyan)}
-.fc--warn{border-color:#ff8a3d}
-.fc--warn .fc__i{color:#ff8a3d}
+.fc--warn{border-color:var(--ext-warn)}
+.fc--warn .fc__i{color:var(--ext-warn)}
 .fc--dash{border-style:dashed}
 .fc__i{width:19px;height:19px;display:block;margin-bottom:var(--spacing-10)}
 .fc__list{margin:var(--spacing-10) 0 0;padding:0;list-style:none;
@@ -208,7 +249,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 /* ---------------------------------------------------------------- 通用区块 */
 .sec{padding-top:var(--sect)}
 .sec__tag{margin-bottom:var(--spacing-15)}
-.sec__h{margin:0 0 var(--spacing-20);font-weight:600;
+.sec__h{margin:0 0 var(--spacing-20);font-weight:var(--font-weight-bold);
   font-size:var(--text-heading-r);line-height:var(--leading-heading);
   letter-spacing:var(--tracking-heading)}
 .sec__lead{margin:0 0 var(--spacing-43);color:var(--color-halo-violet);
@@ -216,10 +257,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 
 /* ---------------------------------------------------------------- 实测数据 */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);
-  background:var(--line);border-radius:var(--radius-lg);overflow:hidden}
+  background:var(--line);border-radius:var(--radius-cards);overflow:hidden}
 .stats>div{background:var(--color-midnight-ink);padding:var(--spacing-30) var(--spacing-24) var(--spacing-26)}
 .stat__t{margin-bottom:var(--spacing-16)}
-.stat__n{font-size:var(--text-heading-lg-r);font-weight:600;line-height:1;
+.stat__n{font-size:var(--text-heading-lg-r);font-weight:var(--font-weight-bold);line-height:1;
   letter-spacing:var(--tracking-heading-lg);color:var(--color-paper)}
 .stat__n u{text-decoration:none;font-size:.44em;font-weight:500;color:var(--color-arc-cyan);
   margin-left:var(--spacing-4);letter-spacing:0}
@@ -233,7 +274,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 .stat__src:hover{color:var(--color-arc-cyan);border-bottom-color:var(--color-arc-cyan)}
 
 /* ---------------------------------------------------------------- 产品截图 */
-.shot{border:1px solid var(--line);background:#06105a;overflow:hidden;border-radius:var(--radius-lg)}
+.shot{border:1px solid var(--line);background:var(--surface-violet-wash);overflow:hidden;border-radius:var(--radius-images)}
 .shot img{width:100%}
 .shot__cap{margin-top:var(--spacing-20);font-size:var(--text-caption);line-height:var(--leading-caption);
   color:var(--color-fog);max-width:64ch}
@@ -248,9 +289,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
 /* ---------------------------------------------------------------- 部署形态 */
 .topo{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(var(--spacing-16),3vw,var(--spacing-40));
   align-items:stretch}
-.node{border:1px solid var(--line);background:#06105a;padding:var(--spacing-26);
-  border-radius:var(--radius-lg)}
-.node__role{margin-bottom:var(--spacing-16);color:#4a6bff}
+.node{border:1px solid var(--line);background:var(--surface-violet-wash);
+  padding:var(--card-padding);border-radius:var(--radius-cards)}
+.node__role{margin-bottom:var(--spacing-16);
+  color:color-mix(in srgb,var(--color-signal-blue) 55%,var(--color-paper))}
 .node__t{font-weight:600;font-size:var(--text-body);margin-bottom:var(--spacing-15)}
 .node ul{margin:0;padding:0;list-style:none;font-size:var(--text-body-sm);
   line-height:var(--leading-body-sm);color:var(--color-halo-violet)}
@@ -272,7 +314,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
   align-items:baseline;font-size:var(--text-body);line-height:var(--leading-body)}
 .pits li>div{min-width:0}
 .pits li::before{content:counter(p,decimal-leading-zero);
-  font:500 var(--text-micro)/2 var(--font-ibm-plex-mono);color:#e0a020;
+  font:500 var(--text-micro)/2 var(--font-ibm-plex-mono);color:var(--ext-pit-number);
   letter-spacing:var(--tracking-micro)}
 .pits em{display:block;margin-top:var(--spacing-4);font-style:normal;
   font-size:var(--text-caption);line-height:var(--leading-caption);color:var(--color-fog)}
@@ -285,14 +327,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--color-arc-cyan);out
   padding:var(--spacing-20) 0;border-bottom:1px solid var(--line-soft);align-items:start}
 .steps li::before{content:counter(s);width:26px;height:26px;display:grid;place-items:center;
   font:500 var(--text-micro)/1 var(--font-ibm-plex-mono);color:var(--color-arc-cyan);
-  border:1px solid var(--color-signal-blue);border-radius:var(--radius-md);margin-top:2px}
+  border:1px solid var(--color-signal-blue);border-radius:var(--radius-tags);margin-top:2px}
 .steps b{display:block;font-weight:600;font-size:var(--text-body-sm);
   line-height:var(--leading-body-sm);margin-bottom:var(--spacing-4)}
 .steps span{color:var(--color-halo-violet);font-size:var(--text-caption);
   line-height:var(--leading-caption)}
-pre{margin:var(--spacing-16) 0 0;background:#00031c;border:1px solid var(--line);
-  border-radius:var(--radius-lg);padding:var(--spacing-20);
-  overflow-x:auto;font-size:13.5px;line-height:1.85;color:#c9d4ff}
+pre{margin:var(--spacing-16) 0 0;background:var(--ext-code-bg);border:1px solid var(--line);
+  border-radius:var(--radius-tags);padding:var(--card-padding);
+  overflow-x:auto;font-size:13.5px;line-height:1.85;color:var(--ext-code-fg)}
 pre .c{color:var(--color-slate-body)}
 pre .k{color:var(--color-arc-cyan)}
 @media (max-width:820px){.dl{grid-template-columns:1fr}}
@@ -339,6 +381,7 @@ pre .k{color:var(--color-arc-cyan)}
   .caps li{grid-template-columns:1fr;gap:var(--spacing-10)}
   .top__nav{display:none}
 }
+@media (max-width:820px){:root{--sect:var(--spacing-80)}}
 @media (max-width:560px){
   .stats{grid-template-columns:1fr}
   .hero{min-height:auto;padding:130px var(--pad) var(--spacing-80)}
