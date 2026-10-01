@@ -3,7 +3,7 @@
         <!-- 展开时：Logo + 搜索/折叠按钮同行 -->
         <div class="logo_row" v-if="!uiStore.sidebarCollapsed">
             <div class="logo_box" @click="router.push('/platform/knowledge-bases')" style="cursor: pointer;">
-                <img class="logo" src="@/assets/img/knowence-logo-dark.svg" alt="">
+                <img class="logo" :src="getImgSrc(isDarkTheme ? 'knowence-logo.svg' : 'knowence-logo-dark.svg')" alt="知微 Knowence">
                 <sup v-if="isLiteEdition" class="lite-badge">Lite</sup>
             </div>
             <div class="logo_actions">
@@ -215,6 +215,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, watch, computed, ref, h, nextTick } from 'vue';
+import { useTheme } from '@/composables/useTheme';
 import { useRoute, useRouter } from 'vue-router';
 import { getSessionsList, batchDelSessions, deleteAllSessions, getSession } from "@/api/chat/index";
 import { useChatResourcesStore } from '@/stores/chatResources';
@@ -1227,6 +1228,16 @@ const getImgSrc = (url: string) => {
     return new URL(`/src/assets/img/${url}`, import.meta.url).href;
 }
 
+// Theme-aware logo: dark SVG for light sidebar, light SVG for dark sidebar
+const { currentTheme } = useTheme()
+const isDarkTheme = computed(() => {
+    const mode = currentTheme.value;
+    if (mode === 'system') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return mode === 'dark';
+})
+
 const mouseenteMenu = (path: string) => {
 }
 const mouseleaveMenu = (path: string) => {
@@ -1946,11 +1957,7 @@ const resizeSidebar = (delta: number, keyboard: boolean) => {
 }
 </style>
 <style lang="less">
-// Dark mode: invert dark logo to light
-html[theme-mode="dark"] .aside_box .logo_box .logo {
-    /* Knowence logo 自带浅色变体，无需滤镜 */
-    filter: none;
-}
+
 
 // Dark mode: 滚动条在深色背景下需要更亮的颜色才看得见
 html[theme-mode="dark"] .aside_box .menu_top:hover {
